@@ -1,0 +1,49 @@
+1. Unzip the package.
+
+2. Change the config file base url path is:  application/config/config.php.
+
+3. Create a database and change the database credentials  is:  application/config/database.php..
+
+4. You application is ready.
+
+5. Default Client Servicing credentails  (http://productionserver.co.in/vault/agency/login): 
+			
+username:abhishek 
+			password:abhishek#123.
+			
+
+6. Default Operations credentails (http://productionserver.co.in/vault/agency/login): 
+			
+username:lokesh 
+			password:lokesh#123.
+			
+
+7. Default Operations credentails (http://productionserver.co.in/vault/agency/login): 
+			
+username:lokesh 
+			password:lokesh#123.
+
+
+8. Default Creative credentails (http://productionserver.co.in/vault/agency/login): 
+			
+username:anshu	 
+			password:anshu#123.
+
+
+9. Default Data & Strategy credentails (http://productionserver.co.in/vault/agency/login): 
+			
+username:swati 
+			password:swati#123.
+
+
+10. Default Operations credentails (http://productionserver.co.in/vault/client/login): 
+			
+username:alsva 
+			password:alsva#123.	
+
+
+11. Default SuperAdmin credentails (http://productionserver.co.in/vault/admin):
+			
+email:abhishek@animonlive.com 
+			password:admin#123.			
+

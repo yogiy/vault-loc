@@ -1,0 +1,19 @@
+
+.overview-btns{
+    
+    width: 90%;
+    font-size: .8em;
+    padding: 10px 0px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+}
+
+.overview-btns span{
+    display: block;
+    font-size: 1.1em !important;
+    font-weight: 600;
+}
+
+.no-padding{
+    padding: 0px;
+}

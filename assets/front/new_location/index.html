@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="HandheldFriendly" content="true">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet" />
+	<link rel="stylesheet" href="../css/font-awesome.min.css" />
+	<link rel="stylesheet" href="../css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../css/style.css" />
+	<link rel="stylesheet" href="../css/loc-styles.css" />
+	<title>Loc-Vault</title>
+	<style>
+		.form-section{
+			padding: 35px 30px;
+		}
+		
+	</style>
+</head>
+
+<body class="loc-assessment">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-2 col-sm-offset-10">
+				<div class="user-label pull-right">
+					<h4><a href="#"><img src="../images/user-icon.svg" class="user-icon" /> Anna Hazarey</a></h4>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3 col-sm-6 col-xs-12">
+				<ul class="menu-list">
+					<li class="row">
+						<a href="#">
+							<div class="col-sm-3 col-xs-2 icon-box">
+								<img src="../images/brief.png" class="img-responsive" />
+							</div>
+							<div class="col-sm-9 col-xs-10 text-box">Brief Module</div>
+						</a>
+					</li>
+					<li class="row">
+						<a href="#">
+							<div class="col-sm-3 col-xs-2 icon-box">
+								<img src="../images/planning.png" class="img-responsive" />
+							</div>
+							<div class="col-sm-9 col-xs-10 text-box">Planning<br />Module</div>
+						</a>
+					</li>
+					<li class="row">
+						<a href="#">
+							<div class="col-sm-3 col-xs-2 icon-box">
+								<img src="../images/program.png" class="img-responsive" />
+							</div>
+							<div class="col-sm-9 col-xs-10 text-box">Program<br />Development</div>
+						</a>
+					</li>
+					<li class="row">
+						<a href="#">
+							<div class="col-sm-3 col-xs-2 icon-box">
+								<img src="../images/archives.png" class="img-responsive" />
+							</div>
+							<div class="col-sm-9 col-xs-10 text-box">Report<br />Archive</div>
+						</a>
+					</li>
+					<li class="row">
+						<a href="#">
+							<div class="col-sm-3 col-xs-2 icon-box">
+								<img src="../images/partner.png" class="img-responsive" />
+							</div>
+							<div class="col-sm-9 col-xs-10 text-box">Partner<br />Indentification</div>
+						</a>
+					</li>
+					<li class="row">
+						<a href="#">
+							<div class="col-sm-3 col-xs-2 icon-box">
+								<img src="../images/project.png" class="img-responsive" />
+							</div>
+							<div class="col-sm-9 col-xs-10 text-box">Project<br />Managment</div>
+						</a>
+					</li>
+					<li class="row">
+						<a href="#">
+							<div class="col-sm-3 col-xs-2 icon-box">
+								<img src="../images/project-assement.png" class="img-responsive" />
+							</div>
+							<div class="col-sm-9 col-xs-10 text-box">Project<br />Assessment</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="col-md-9 col-sm-6 col-xs-12">
+				<div class="form-section ">
+					<label>CSR Overview</label>
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="row">
+								<div class="col-sm-6 no-padding">
+									<button class="btn btn-theme-green pull-right overview-btns">State/UT Covered<span>36</span></button>
+
+									<button class="btn btn-theme-orange pull-right overview-btns">Total Companies<span>199936</span></button>
+								</div>
+								<div class="col-sm-6 no-padding">
+									<button class="btn btn-theme-orange overview-btns">Total csr Projects <span>21365</span></button>
+									<button class="btn btn-theme-green overview-btns">CSR Expenditure<span>13465</span></button>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-sm-12">
+									<label style="text-align:center; display:block;">Total CSR Expenditure</label>
+									<div id="piechart"></div>
+								</div>
+							</div>
+
+						</div>
+						<!-- <div class="col-sm-6 col-sm-offset-2">
+							<div class="preview-box">
+								<h1>Preview</h1>
+							</div>
+							<div class="form-group mt-30">
+								<label>Extra Notes</label>
+								<textarea class="form-control" rows="3"></textarea>
+							</div>
+						</div>
+											 -->
+						<div class="col-sm-3 ">
+							<div class="row">
+								<div class="col-sm-3">
+									<label>Year</label>
+								</div>
+								<div class="col-sm-9">
+									<div class="form-group">
+										<select class="form-control">
+											<option>Select Year</option>
+											<option>FY 2014-15</option>
+											<option>FY 2015-16</option>
+											<option>FY 2016-17</option>
+											<option>FY 2017-18</option>
+											<option>FY 2018-19</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<!-- place year dropdonw here -->
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript">
+		// Load google charts
+		google.charts.load('current', { 'packages': ['corechart'] });
+		google.charts.setOnLoadCallback(drawChart);
+
+		// Draw the chart and set the chart values
+		function drawChart() {
+			var data = google.visualization.arrayToDataTable([
+				['Element', 'data',  { role: 'style' }],
+				['FY 2014-15', 10000,  '#f5922c'],
+				['FY 2015-16', 14000,  '#f5922c'],
+				['FY 2016-17', 12000,  '#f5922c'],
+				['FY 2017-18(F)',  17000, '#39bdc9'],
+				['FY 2019-20(F)',  21000, '#39bdc9'],
+				['FY 2019-20(F)',  24000, '#39bdc9'],
+			]);
+
+			// Optional; add a title and set the width and height of the chart
+			var options = {
+				// 'title': 'Total CSR Expenditure',
+				// legend: { position: 'top', maxLines: 2, alignment:'center' },
+				isStacked: false,
+				backgroundColor: 'transparent',
+				width: 400,
+				height: 300,
+				chartArea: { width: '80%', height: '70%' },
+				colors: ['#f5922c', '#39bdc9'],
+				vAxis: {
+					minValue: 0,
+					ticks: [0, 5000, 10000, 15000, 20000, 25000]
+				}
+
+			};
+
+			// Display the chart inside the <div> element with id="piechart"
+			var chart = new google.visualization.ColumnChart(document.getElementById('piechart'));
+			chart.draw(data, options);
+		}
+	</script>
+
+</body>
+
+</html>

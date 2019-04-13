@@ -1,0 +1,599 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+	<meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+    <title>Vault</title>
+</head>
+<body class="development">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-2 col-sm-offset-10">
+				<div class="user-label pull-right">
+					<h4><a href="#"><img src="images/user-icon.svg" class="user-icon"/> Anna Hazarey</a></h4>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3 col-sm-6 col-xs-12">
+				<ul class="menu-list development-page">
+					<li class="row">
+						<a href="#">
+							<div class="col-sm-3 col-xs-2 icon-box">
+								<img src="images/brief.png" class="img-responsive"/>
+							</div>
+							<div class="col-sm-9 col-xs-10 text-box">Brief Module</div>
+						</a>
+					</li>
+					<li class="row">
+						<a href="#">
+							<div class="col-sm-3 col-xs-2 icon-box">
+								<img src="images/planning.png" class="img-responsive"/>
+							</div>
+							<div class="col-sm-9 col-xs-10 text-box">Planning<br/>Module</div>
+						</a>
+					</li>
+					<li class="row">
+						<a href="#">
+							<div class="col-sm-3 col-xs-2 icon-box">
+								<img src="images/program.png" class="img-responsive"/>
+							</div>
+							<div class="col-sm-9 col-xs-10 text-box">Program<br/>Development</div>
+						</a>
+					</li>
+					<li class="row">
+						<a href="#">
+							<div class="col-sm-3 col-xs-2 icon-box">
+								<img src="images/archives.png" class="img-responsive"/>
+							</div>
+							<div class="col-sm-9 col-xs-10 text-box">Archives</div>
+						</a>
+					</li>
+					<li class="row">
+						<a href="#">
+							<div class="col-sm-3 col-xs-2 icon-box">
+								<img src="images/partner.png" class="img-responsive"/>
+							</div>
+							<div class="col-sm-9 col-xs-10 text-box">Partner<br/>Indentification</div>
+						</a>
+					</li>
+					<li class="row">
+						<a href="#">
+							<div class="col-sm-3 col-xs-2 icon-box">
+								<img src="images/project.png" class="img-responsive"/>
+							</div>
+							<div class="col-sm-9 col-xs-10 text-box">Project<br/>Managment</div>
+						</a>
+					</li>
+					<li class="row">
+						<a href="#">
+							<div class="col-sm-3 col-xs-2 icon-box">
+								<img src="images/project-assement.png" class="img-responsive"/>
+							</div>
+							<div class="col-sm-9 col-xs-10 text-box">Project<br/>Assessment</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="col-md-9 col-sm-6 col-xs-12">
+				<div class="form-section">
+					<div class="row">
+						<div class="col-sm-2">
+							<div class="form-group">
+								<label>MOU Signed Date</label>
+								<input type="text" class="form-control" placeholder="yyyy/mm/dd"/>
+							</div>
+							<div class="form-group">
+								<label>Budget Allocated</label>
+								<input type="text" class="form-control"/>
+							</div>
+							<div class="form-group">
+								<label>NGO Partners</label>
+								<button class="btn btn-warning btn-sm">Download Excel</button>
+							</div>
+							<div class="form-group">
+								<label>Funds Disbursement</label>
+								<select class="form-control">
+									<option>Submitted </option>
+									<option>2</option>
+									<option>3</option>
+									<option>4</option>
+									<option>5</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label>Reporting Schedule</label>
+								<select class="form-control">
+									<option>Submitted </option>
+									<option>2</option>
+									<option>3</option>
+									<option>4</option>
+									<option>5</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-sm-10">
+							<div class="row min-h">
+								<div class="col-sm-1">
+									<div class="circle"></div>
+								</div>
+								<div class="col-sm-11">
+									<label>Baseline Study</label>
+									<div class="row">
+										<div class="col-sm-3">
+											<div class="row">
+												<div class="col-sm-6">											
+													<div class="upload-btn-wrapper">
+													  <button class="btn">Choose file</button>
+													  <input type="file" name="myfile" />
+													</div>											
+												</div>										
+												<div class="col-sm-6">
+													<button class="btn btn-warning btn-sm">Upload</button>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-5">
+											<div class="row">
+												<div class="col-sm-2">
+													<div class="chiller_cb">
+														<input id="Checkbox1" type="checkbox"/>
+														<label for="Checkbox1">client</label>
+														<span></span>
+													 </div>
+												</div>
+												<div class="col-sm-10">
+													<div class="input-group">
+														<input type="text" class="form-control" placeholder="Send to client Email ID">
+													  <span class="input-group-btn">
+														<button class="btn btn-default btn-sm" type="button">Send</button>
+													  </span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-2">
+											<select class="form-control">
+												<option>Submitted </option>
+												<option>2</option>
+												<option>3</option>
+												<option>4</option>
+												<option>5</option>
+											</select>
+										</div>
+										<div class="col-sm-2">
+											<button class="btn btn-green btn-sm">Download</button>
+										</div>
+									</div>									
+								</div>
+							</div>
+							<div class="row min-h">
+								<div class="col-sm-1">
+									<div class="circle"></div>
+								</div>
+								<div class="col-sm-11">
+									<label>Need Assesment</label>
+									<div class="row">
+										<div class="col-sm-3">
+											<div class="row">
+												<div class="col-sm-6">											
+													<div class="upload-btn-wrapper">
+													  <button class="btn">Choose file</button>
+													  <input type="file" name="myfile" />
+													</div>											
+												</div>										
+												<div class="col-sm-6">
+													<button class="btn btn-warning btn-sm">Upload</button>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-5">
+											<div class="row">
+												<div class="col-sm-2">
+													<div class="chiller_cb">
+														<input id="Checkbox2" type="checkbox"/>
+														<label for="Checkbox2">client</label>
+														<span></span>
+													 </div>
+												</div>
+												<div class="col-sm-10">
+													<div class="input-group">
+														<input type="text" class="form-control" placeholder="Send to client Email ID">
+													  <span class="input-group-btn">
+														<button class="btn btn-default btn-sm" type="button">Send</button>
+													  </span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-2">
+											<select class="form-control">
+												<option>Submitted </option>
+												<option>2</option>
+												<option>3</option>
+												<option>4</option>
+												<option>5</option>
+											</select>
+										</div>
+										<div class="col-sm-2">
+											<button class="btn btn-green btn-sm">Download</button>
+										</div>
+									</div>									
+								</div>
+							</div>
+							<div class="row min-h">
+								<div class="col-sm-1">
+									<div class="circle"></div>
+								</div>
+								<div class="col-sm-11">
+									<label>Monitoring</label>
+									<div class="row">
+										<div class="col-sm-2">
+											<label class="nowrap text-center">Pre-Preparation</label>
+										</div>
+										<div class="col-sm-2">
+											<div class="form-group">
+												<input type="text" class="form-control" placeholder="yyyy/mm/dd"/>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="row">
+												<div class="col-sm-6">											
+													<div class="upload-btn-wrapper">
+													  <button class="btn">Choose file</button>
+													  <input type="file" name="myfile" />
+													</div>											
+												</div>										
+												<div class="col-sm-6">
+													<button class="btn btn-warning btn-sm">Upload</button>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<select class="form-control">
+												<option>Submitted </option>
+												<option>2</option>
+												<option>3</option>
+												<option>4</option>
+												<option>5</option>
+											</select>
+										</div>
+										<div class="col-sm-2">
+											<button class="btn btn-green btn-sm">Download</button>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-2">
+											<label class="nowrap text-center">Interim Reports</label>
+										</div>
+										<div class="col-sm-2">
+											<div class="form-group">
+												<input type="text" class="form-control" placeholder="yyyy/mm/dd"/>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="row">
+												<div class="col-sm-6">											
+													<div class="upload-btn-wrapper">
+													  <button class="btn">Choose file</button>
+													  <input type="file" name="myfile" />
+													</div>											
+												</div>										
+												<div class="col-sm-6">
+													<button class="btn btn-warning btn-sm">Upload</button>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<select class="form-control">
+												<option>Submitted </option>
+												<option>2</option>
+												<option>3</option>
+												<option>4</option>
+												<option>5</option>
+											</select>
+										</div>
+										<div class="col-sm-2">
+											<button class="btn btn-gray btn-sm">Download</button>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-2">
+											<label class="nowrap text-center">Final Reports</label>
+										</div>
+										<div class="col-sm-2">
+											<div class="form-group">
+												<input type="text" class="form-control" placeholder="yyyy/mm/dd"/>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="row">
+												<div class="col-sm-6">											
+													<div class="upload-btn-wrapper">
+													  <button class="btn">Choose file</button>
+													  <input type="file" name="myfile" />
+													</div>											
+												</div>										
+												<div class="col-sm-6">
+													<button class="btn btn-warning btn-sm">Upload</button>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<select class="form-control">
+												<option>Submitted </option>
+												<option>2</option>
+												<option>3</option>
+												<option>4</option>
+												<option>5</option>
+											</select>
+										</div>
+										<div class="col-sm-2">
+											<button class="btn btn-gray btn-sm">Download</button>
+										</div>
+									</div>
+									
+								</div>
+							</div>
+							<div class="row min-h">
+								<div class="col-sm-1">
+									<div class="circle"></div>
+								</div>
+								<div class="col-sm-11">
+									<label>Reporting</label>
+									<div class="row">
+										<div class="col-sm-2">
+											<label class="nowrap text-center">Pre-Preparation</label>
+										</div>
+										<div class="col-sm-2">
+											<div class="form-group">
+												<input type="text" class="form-control" placeholder="yyyy/mm/dd"/>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="row">
+												<div class="col-sm-6">											
+													<div class="upload-btn-wrapper">
+													  <button class="btn">Choose file</button>
+													  <input type="file" name="myfile" />
+													</div>											
+												</div>										
+												<div class="col-sm-6">
+													<button class="btn btn-warning btn-sm">Upload</button>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<select class="form-control">
+												<option>Submitted </option>
+												<option>2</option>
+												<option>3</option>
+												<option>4</option>
+												<option>5</option>
+											</select>
+										</div>
+										<div class="col-sm-2">
+											<button class="btn btn-green btn-sm">Download</button>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-2">
+											<label class="nowrap text-center">Interim Reports</label>
+										</div>
+										<div class="col-sm-2">
+											<div class="form-group">
+												<input type="text" class="form-control" placeholder="yyyy/mm/dd"/>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="row">
+												<div class="col-sm-6">											
+													<div class="upload-btn-wrapper">
+													  <button class="btn">Choose file</button>
+													  <input type="file" name="myfile" />
+													</div>											
+												</div>										
+												<div class="col-sm-6">
+													<button class="btn btn-warning btn-sm">Upload</button>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<select class="form-control">
+												<option>Submitted </option>
+												<option>2</option>
+												<option>3</option>
+												<option>4</option>
+												<option>5</option>
+											</select>
+										</div>
+										<div class="col-sm-2">
+											<button class="btn btn-gray btn-sm">Download</button>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-2">
+											<label class="nowrap text-center">Final Reports</label>
+										</div>
+										<div class="col-sm-2">
+											<div class="form-group">
+												<input type="text" class="form-control" placeholder="yyyy/mm/dd"/>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="row">
+												<div class="col-sm-6">											
+													<div class="upload-btn-wrapper">
+													  <button class="btn">Choose file</button>
+													  <input type="file" name="myfile" />
+													</div>											
+												</div>										
+												<div class="col-sm-6">
+													<button class="btn btn-warning btn-sm">Upload</button>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<select class="form-control">
+												<option>Submitted </option>
+												<option>2</option>
+												<option>3</option>
+												<option>4</option>
+												<option>5</option>
+											</select>
+										</div>
+										<div class="col-sm-2">
+											<button class="btn btn-gray btn-sm">Download</button>
+										</div>
+									</div>
+									
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-offset-1 col-sm-11">
+									<div class="row">
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label>Set Reminder</label>	
+													<input type="text" class="form-control text-box-orange" placeholder="yyyy/mm/dd"/>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<label>Benificiary Import</label>
+											<div class="row">
+												<div class="col-sm-6">											
+													<div class="upload-btn-wrapper">
+													  <button class="btn">Choose file</button>
+													  <input type="file" name="myfile" />
+													</div>											
+												</div>										
+												<div class="col-sm-6">
+													<button class="btn btn-warning btn-sm">Upload</button>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<label>Project Assesment</label>
+											<div class="row">
+												<div class="col-sm-6">											
+													<div class="upload-btn-wrapper">
+													  <button class="btn">Choose file</button>
+													  <input type="file" name="myfile" />
+													</div>											
+												</div>										
+												<div class="col-sm-6">
+													<button class="btn btn-warning btn-sm">Upload</button>
+												</div>
+											</div>
+										</div>
+									</div>									
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#suggested">
+									  Add Rework
+									</button>
+								</div>
+							<!-- Modal -->
+							<div class="modal fade " id="suggested" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+							  <div class="modal-dialog" role="document">
+								<div class="modal-content gray-modal">
+								  <div class="modal-body">
+								  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+									<h4 class="modal-title text-center" id="myModalLabel"><label>Add Rework</label></h4>
+									<div class="row">
+										<div class="col-xs-2 col-sm-offset-3">
+											<label>Rework</label>
+										</div>
+										<div class="col-xs-4">
+											<div class="row">
+												<div class="col-sm-6">											
+													<div class="upload-btn-wrapper">
+													  <button class="btn">Choose file</button>
+													  <input type="file" name="myfile" />
+													</div>											
+												</div>										
+												<div class="col-sm-6">
+													<button class="btn btn-warning btn-sm">Upload</button>
+												</div>
+											</div>	
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-5 col-sm-offset-3">
+											<label>Assignet to</label>
+											<select class="form-control">
+												<option>Submitted </option>
+												<option>2</option>
+												<option>3</option>
+												<option>4</option>
+												<option>5</option>
+											</select>
+										</div>
+									</div>
+									<div class="row custom-table">
+										<div class="col-sm-12">
+											<div class="scroll-table">
+												<table class="table table-responsive table-bordered mb-20 table-top-orange">
+													<tr>
+														<td>Report Name</td>
+														<td>Uploaded on</td>
+														<td>City</td>
+														<td>Zone</td>
+														<td>Brand</td>
+														<td>Status</td>
+													</tr>
+													<tr>
+														<td>RW 1</td>
+														<td>xxxxxx</td>
+														<td>xxxxxx</td>
+														<td>xxxxxx</td>
+														<td>xxxxxx</td>
+														<td>xxxxxx</td>
+													</tr>
+													<tr>
+														<td>RW 2</td>
+														<td>xxxxxx</td>
+														<td>xxxxxx</td>
+														<td>xxxxxx</td>
+														<td>xxxxxx</td>
+														<td>xxxxxx</td>
+													</tr>
+													<tr>
+														<td>RW 3</td>
+														<td>xxxxxx</td>
+														<td>xxxxxx</td>
+														<td>xxxxxx</td>
+														<td>xxxxxx</td>
+														<td>xxxxxx</td>
+													</tr>
+												</table>
+											</div>
+										</div>
+									</div>
+								  </div>
+								</div>
+							  </div>
+							</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<button class="btn btn-warning pull-right">Save & Update</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+</body>
+</html>

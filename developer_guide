@@ -1,0 +1,77 @@
+# Vault Developer Guide
+
+<a name="introduction"></a>
+## Introduction
+
+Vault project uses different panels / Interfaces.  
+
+
+Vault package is build with codeigniter framework (PHP).  
+
+- [Installation](#installation)
+    - [Server Requirements](#server-requirements)
+    - [Installing Vault backend and frontend](#installing-vault)
+    - [Configuration Vault backend and frontend](#configuration-vault)
+- [Web Server Configuration](#web-server-configuration)
+    - [Pretty URLs](#pretty-urls)
+- [Directory Structure](#directory-structure)
+    - [Vault backend](#ds-vault)
+- [Third party Packages/Plugins used](#third-party-plugins)
+    - [Packages used in Vault backend](#third-party-plugins-vault)
+
+
+
+<a name="installation"></a>
+## Installation
+
+<a name="server-requirements"></a>
+### Server Requirements
+
+The Vault project is build on top of codeigniter. It has a few system requirements. You can use codeigniter Homestead (virtual machine) as your local codeigniter development environment.
+
+However, if you are not using Homestead, you will need to make sure your server meets the following requirements:
+
+
+- Apache or Nginx
+- PHP >= 5.6.4(Use latest php version)
+- OpenSSL PHP Extension
+- PDO PHP Extension
+- Mbstring PHP Extension
+- MySQL > 3.0. or mariadb(Use latest mysql/mariadb version)
+
+
+<a name="installing-Vault"></a>
+
+#### Installing Vault 
+
+
+###### via GitLab
+1. The project is in Gitlab Environment. gitlab repository is ```https://gitlab.com/swatich123/vault-project.git```.
+2. before setting project through gitlab make sure that you are set as a developer in Gitlab. If not, ask Gitlab Administrator to give you developer role.
+3. Clone the repository via ```Git clone https://gitlab.com/swatich123/vault-project.git```. Default branch is ``master``, make sure in ``master`` branch.
+3. Change the config file base url path is:  application/config/config.php.
+4. Create a database.
+5. Change the database credentials in:  application/config/database.php.
+6. You application is ready.
+
+###### via Zip Download
+1. Unzip the package.
+2. Change the config file base url path is:  application/config/config.php.
+3. Create a database.
+4. Change the database credentials in:  application/config/database.php.
+
+
+###### Development Server
+
+ If you have PHP installed locally and you would like to use PHP's built-in development server to serve your application, you may use to start a development server at `http://localhost/project-name`:
+
+ 
+
+<a name="configuration-Vault"></a>
+##### Configuration
+
+###### Configuration Files
+
+- Configuration files for changing baseurl is:
+  - application/config/config.php  
+  
