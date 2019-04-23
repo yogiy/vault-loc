@@ -108,16 +108,16 @@ class Loc_Modal extends CI_Model
     public function getCompanyListByThematicArea($thematic_area_id, $state_id, $district_id)
     {
         $filter = array();
-        if($district_id == null){
+        if ($district_id == null) {
             $filter = array(
-                'thematic_area_id' => $thematic_area_id, 
-                'state_id'=>$state_id
+                'thematic_area_id' => $thematic_area_id,
+                'state_id' => $state_id,
             );
-        }else{
+        } else {
             $filter = array(
-                'thematic_area_id' => $thematic_area_id, 
-                'state_id'=>$state_id,
-                'district_id' => $district_id
+                'thematic_area_id' => $thematic_area_id,
+                'state_id' => $state_id,
+                'district_id' => $district_id,
             );
         }
         $query = $this->db->distinct()->select('company')->get_where('thematic_overview', $filter)->result_array();
@@ -125,45 +125,48 @@ class Loc_Modal extends CI_Model
         return json_encode($query);
     }
 
-    public function getCompanyCountByThematic($thematic_area_id){
+    public function getCompanyCountByThematic($thematic_area_id)
+    {
 
-        $query = $this->db->distinct()->select('company')->get_where('thematic_overview', array('thematic_area_id' => $thematic_area_id ))->result_array();
+        $query = $this->db->distinct()->select('company')->get_where('thematic_overview', array('thematic_area_id' => $thematic_area_id))->result_array();
         return count($query);
     }
 
-    public function getThematicOverviewDataByState($thematic_area_id, $stateId, $fy  ){
+    public function getThematicOverviewDataByState($thematic_area_id, $stateId, $fy)
+    {
         //->group_by("district_id")
         //
         //$this->db->select_sum('age');
-        //$this->db->group_by("title"); 
-        $fy_year = 'fy_'.$fy;
-        $sql = "SELECT d.district_id, d.title as DISTRICT, SUM(`".$fy_year."`) as AMOUNT FROM `thematic_overview` t, `district` d WHERE t.`state_id` = ? AND t.thematic_area_id = ? AND t.district_id = d.district_id GROUP BY t.district_id ";
-        return $this->db->query($sql, array( $stateId, $thematic_area_id))->result_array();
-        
+        //$this->db->group_by("title");
+        $fy_year = 'fy_' . $fy;
+        $sql = "SELECT d.district_id, d.title as DISTRICT, SUM(`" . $fy_year . "`) as AMOUNT FROM `thematic_overview` t, `district` d WHERE t.`state_id` = ? AND t.thematic_area_id = ? AND t.district_id = d.district_id GROUP BY t.district_id ";
+        return $this->db->query($sql, array($stateId, $thematic_area_id))->result_array();
+
         // return $this->db->last_query();
-        
+
         // $query = $this->db->get_where('thematic_overview', array('thematic_area_id' => $thematic_area_id, 'state_id' => $stateId))->result_array();
         // return $query;
     }
 
-    public function getMapDataForCompany($thematic, $state, $fy, $district, $company){
-        $financial = 'fy_'.$fy;
+    public function getMapDataForCompany($thematic, $state, $fy, $district, $company)
+    {
+        $financial = 'fy_' . $fy;
         $filter = array();
-        if($district == 0){
+        if ($district == 0) {
             $filter = array(
-                'thematic_area_id'=>$thematic,
+                'thematic_area_id' => $thematic,
                 'state_id' => $state,
-                'company' => $company
+                'company' => $company,
             );
             $query = $this->db->select("id, company, lat, lng, district_id, $financial as amount")->get_where('thematic_overview', $filter)->result_array();
             return json_encode($query);
             // return $this->db->last_query();
-        }else{
+        } else {
             $filter = array(
-                'thematic_area_id'=>$thematic,
+                'thematic_area_id' => $thematic,
                 'state_id' => $state,
                 'company' => $company,
-                'district_id'=> $district
+                'district_id' => $district,
             );
             $query = $this->db->select_sum($financial, "amount")
                 ->select("id, company, lat, lng, district_id")->get_where('thematic_overview', $filter)->result_array();
@@ -362,10 +365,37 @@ class Loc_Modal extends CI_Model
             ->get('loc_thematic_areas')->result_array();
     }
 
-    public function getLevelMapData($city, $level){
+    public function getLevelMapData($city, $level)
+    {
         $col_name = preg_replace('/\s+/', '_', $city);
-        $query = $this->db->select("`{$col_name}` AS amount", FALSE)->get_where("performance_parameters", array('id'=>$level))->result();
+        $query = $this->db->select("`{$col_name}` AS amount", false)->get_where("performance_parameters", array('id' => $level))->result();
         return json_encode($query[0]);
+    }
+
+    public function getMapDBData($pdid, $cityID, $levelID)
+    {
+        $datafilter = array();
+        if ($cityID == 'none') {
+            $datafilter = array(
+                'pdid' => $pdid,
+            );
+        } else if ($cityID != 'none' && $levelID == 'none') {
+            $datafilter = array(
+                'pdid' => $pdid,
+                'city_id' => $cityID,
+            );
+        } else {
+            $datafilter = array(
+                'pdid' => $pdid,
+                'city_id' => $cityID,
+                'level_id' => $levelID,
+            );
+        }
+
+        $query = $this->db->get_where("map_db", $datafilter)->result();
+        // return $datafilter;
+        // return $this->db->last_query();
+        return json_encode($query);
     }
 
     public function getSubThematicAreas($id)

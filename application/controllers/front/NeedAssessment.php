@@ -116,7 +116,13 @@ class NeedAssessment extends CI_Controller
         echo $this->Loc_modal->getShapesFromDB();       
     }
 
-    
+    public function getMapDBData(){
+        $pdid =  $this->input->post('pdid'); 
+        $cityID = $this->input->post('cityID');
+        $levelID = $this->input->post('levelID');
+        
+        echo $this->Loc_modal->getMapDBData($pdid, $cityID, $levelID);        
+    }
 
 
 

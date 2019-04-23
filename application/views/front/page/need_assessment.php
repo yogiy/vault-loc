@@ -744,7 +744,7 @@ $('#need_citys_dropdown').on('change', function(event){
 	method: "POST",
 	data: {inObj: selected},
 	success: function(response){
-			removeCompanyMarkers();
+			getMapDBData();
 			$('#need_level_dropdown').val("none");
 			result = JSON.parse(response);
 			centeres =   { lat: +result['latitude'], lng: +result['longitude'] };
@@ -755,6 +755,38 @@ $('#need_citys_dropdown').on('change', function(event){
 	});
 
 });
+
+function getMapDBData(){
+	pdid = <?php echo $brief_id; ?>;
+	cityID = $('#need_citys_dropdown').val(); 
+	levelID = $('#need_level_dropdown').val();
+	$.ajax({
+			url: '<?php echo site_url("front/NeedAssessment/getMapDBData"); ?>',
+			method: "POST",
+			data: {pdid: pdid, cityID:cityID, levelID:levelID },
+			success: function(response){
+				removeCompanyMarkers();
+				res = JSON.parse(response);
+				console.log(res);
+				for (var i = 0; i < res.length; i++) {  
+					var infowindow = new google.maps.InfoWindow();
+
+					var marker = new google.maps.Marker({
+						position: new google.maps.LatLng(res[i].latitude, res[i].longitude),
+						map: map
+					});
+
+					google.maps.event.addListener(marker, 'mouseover', (function(marker, i) {
+						return function() {
+							infowindow.setContent(res[i].city+" : "+res[i].count);
+							infowindow.open(map, marker);
+						}
+					})(marker, i));
+					markers.push(marker);							
+				}
+			}
+		});
+}
 
 function removeCompanyMarkers(){
 	for (var i = 0; i < markers.length; i++) {
@@ -776,17 +808,17 @@ $('#need_level_dropdown').on('change', function(event){
 		if(selected_level == "none"){
 			removeCompanyMarkers();
 		}else{
+			getMapDBData();
 			city_name = $('#need_citys_dropdown option:selected').html();
-			console.log("Get level :"+selected_level+" for city: "+city_name)
+			// console.log("Get level :"+selected_level+" for city: "+city_name)
 			$.ajax({
 				url: '<?php echo site_url("front/NeedAssessment/getLevelMapData"); ?>',
 				method: "POST",
 				data: {city: city_name, level: selected_level},
 				success: function(response){
-					console.log('getLevelMapData');
+					// console.log('getLevelMapData');
 					res = JSON.parse(response);
 
-					removeCompanyMarkers();
 					// for (var i = 0; i < locations.length; i++) {  
 					var infowindow = new google.maps.InfoWindow();
 
@@ -856,11 +888,7 @@ function reloadPieCharts(leftPie, rightPie){
 function initMap() {
   // The map, centered at india
   map = new google.maps.Map(document.getElementById('map_canvas'), options);
-	//   centerMarker = new google.maps.Marker({
-	// 	position: centeres,
-	// 	map: map,
-	// 	icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
-	// });
+  getMapDBData();
 }
     </script>
 

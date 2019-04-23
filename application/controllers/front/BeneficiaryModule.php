@@ -54,6 +54,13 @@ class BeneficiaryModule extends CI_Controller
         // $this->load->view('beneficiary_module', $data);
     }
 
+    public function getMapDBData(){
+        $pdid =  $this->input->post('pdid'); 
+        $cityID = $this->input->post('cityID');
+        $levelID = $this->input->post('levelID');
+        
+        echo $this->Loc_modal->getMapDBData($pdid, $cityID, $levelID);        
+    }
 
     public function getLevelMapData(){
         $city = $this->input->post('city');

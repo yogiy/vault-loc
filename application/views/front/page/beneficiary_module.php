@@ -398,13 +398,12 @@ $('#benefit_cities_dropdown').on('change', function(event){
 	}
 	selectedCity = $('#benefit_cities_dropdown option:selected').html();
 	// console.log('City Selected: '+selected);
-	
 	$.ajax({
 	url: '<?php echo site_url("front/BeneficiaryModule/getCityData"); ?>',
 	method: "POST",
 	data: {inObj: selected},
 	success: function(response){
-			removeCompanyMarkers();
+			getMapDBData();
 			$('#benefit_level_dropdown').val("none");
 
 			result = JSON.parse(response);
@@ -415,6 +414,39 @@ $('#benefit_cities_dropdown').on('change', function(event){
 	});
 
 });
+
+function getMapDBData(){
+	pdid = <?php echo $brief_id; ?>;
+	cityID = $('#benefit_cities_dropdown').val(); 
+	levelID = $('#benefit_level_dropdown').val();
+	$.ajax({
+			url: '<?php echo site_url("front/BeneficiaryModule/getMapDBData"); ?>',
+			method: "POST",
+			data: {pdid: pdid, cityID:cityID, levelID:levelID },
+			success: function(response){
+				removeCompanyMarkers();
+				res = JSON.parse(response);
+				console.log(res);
+				for (var i = 0; i < res.length; i++) {  
+					var infowindow = new google.maps.InfoWindow();
+
+					var marker = new google.maps.Marker({
+						position: new google.maps.LatLng(res[i].latitude, res[i].longitude),
+						map: map
+					});
+
+					google.maps.event.addListener(marker, 'mouseover', (function(marker, i) {
+						return function() {
+							infowindow.setContent(res[i].city+" : "+res[i].count);
+							infowindow.open(map, marker);
+						}
+					})(marker, i));
+					markers.push(marker);							
+				}
+			}
+		});
+}
+
 
 
 function removeCompanyMarkers(){
@@ -438,6 +470,7 @@ $('#benefit_level_dropdown').on('change', function(event){
 		if(selected_level == "none"){
 			removeCompanyMarkers();
 		}else{
+			getMapDBData();
 			city_name = $('#benefit_cities_dropdown option:selected').html();
 			console.log("Get level :"+selected_level+" for city: "+city_name)
 			$.ajax({
@@ -448,7 +481,6 @@ $('#benefit_level_dropdown').on('change', function(event){
 					console.log('getLevelMapData');
 					res = JSON.parse(response);
 
-					removeCompanyMarkers();
 					// for (var i = 0; i < locations.length; i++) {  
 					var infowindow = new google.maps.InfoWindow();
 
@@ -486,6 +518,7 @@ $('#beneficiary_table_search').on('input', function(event){
 		});
 	// }
 });
+
 var uploadType = null;
 $('#overallSnapshotDataBtn').on('click', function(event){
 	event.preventDefault();
@@ -493,18 +526,21 @@ $('#overallSnapshotDataBtn').on('click', function(event){
 	uploadType = "overall";
 	$('#beneficiary_attachment_file_input').trigger('click');
 });
+
 $('#beneficiaryDataBtn').on('click', function(event){
 	event.preventDefault();
 	// alert('bene');
 	uploadType = "bene";
 	$('#beneficiary_attachment_file_input').trigger('click');
 });
+
 $('#mapDataBtn').on('click', function(event){
 	event.preventDefault();
 	// alert('map');
 	uploadType = "map";
 	$('#beneficiary_attachment_file_input').trigger('click');
 });
+
 $("#beneficiary_attachment_file_input").on("change paste keyup", function (event) {
     event.preventDefault();
 
@@ -571,11 +607,7 @@ $('#nextSetRecords').on('click', function(event){
 function initMap() {
   // The map, centered at india
   	map = new google.maps.Map(document.getElementById('map_canvas'), options);
-	// centerMarker = new google.maps.Marker({
-	// 	position: centeres,
-	// 	map: map,
-	// 	icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
-	// });
+	  getMapDBData();
 }
     </script>
 
@@ -594,23 +626,23 @@ function polygonCenter(polys) {
         lngs = [],
         vertices = polys.getPath();
 
-    for(var i=0; i<vertices.length; i++) {
-      lngs.push(vertices.getAt(i).lng());
-      lats.push(vertices.getAt(i).lat());
-    }
+		for(var i=0; i<vertices.length; i++) {
+			lngs.push(vertices.getAt(i).lng());
+			lats.push(vertices.getAt(i).lat());
+		}
 
-    lats.sort();
-    lngs.sort();
-    lowx = lats[0];
-    highx = lats[vertices.length - 1];
-    lowy = lngs[0];
-    highy = lngs[vertices.length - 1];
-    center_x = lowx + ((highx-lowx) / 2);
-    center_y = lowy + ((highy - lowy) / 2);
-	//console.log(center_x, center_y);
-	 cord = center_x+"-"+center_y;
-    return cord;
-  }
+		lats.sort();
+		lngs.sort();
+		lowx = lats[0];
+		highx = lats[vertices.length - 1];
+		lowy = lngs[0];
+		highy = lngs[vertices.length - 1];
+		center_x = lowx + ((highx-lowx) / 2);
+		center_y = lowy + ((highy - lowy) / 2);
+		//console.log(center_x, center_y);
+		cord = center_x+"-"+center_y;
+		return cord;
+}
 
 function parsePolyStrings(ps) {
     var i, j, lat, lng, tmp, tmpArr,
@@ -637,6 +669,7 @@ function parsePolyStrings(ps) {
     //array of arrays of LatLng objects, or empty array
     return arr;
 }
+
 	// this is to get the shapes from the database
 		// $.ajax({
 		// 	url: '<?php echo site_url("front/BeneficiaryModule/getShapesFromDB"); ?>',
