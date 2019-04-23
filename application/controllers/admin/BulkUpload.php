@@ -488,17 +488,26 @@ class BulkUpload extends CI_Controller
                 break;
             }
             $data_excel[$row - 2]['company']            = $worksheet->getCellByColumnAndRow(1, $row)->getValue();
-            $data_excel[$row - 2]['thematic_area_id']   = $this->Loc_modal->getThematicId($worksheet->getCellByColumnAndRow(2, $row)->getValue());
+            $data_excel[$row - 2]['thematic_area_id']   = ($worksheet->getCellByColumnAndRow(2, $row)->getValue() == 'NEC/ Not Mentioned') ? 0 : $this->Loc_modal->getThematicId($worksheet->getCellByColumnAndRow(2, $row)->getValue());
             $data_excel[$row - 2]['state_id']           = $this->Loc_modal->getStateId($worksheet->getCellByColumnAndRow(3, $row)->getValue());
-            $data_excel[$row - 2]['district_id']        = $this->Loc_modal->getDistrictId($worksheet->getCellByColumnAndRow(4, $row)->getValue());
+            $data_excel[$row - 2]['district_id']        = $worksheet->getCellByColumnAndRow(4, $row)->getValue() == 'NEC/ Not Mentioned' ? 0 : $this->Loc_modal->getDistrictId($worksheet->getCellByColumnAndRow(4, $row)->getValue(), $data_excel[$row - 2]['state_id']);
+
             $data_excel[$row - 2]['lat']                = $worksheet->getCellByColumnAndRow(5, $row)->getValue();
             $data_excel[$row - 2]['lng']                = $worksheet->getCellByColumnAndRow(6, $row)->getValue();
             $data_excel[$row - 2]['fy_2014-15']         = $worksheet->getCellByColumnAndRow(7, $row)->getValue();
             $data_excel[$row - 2]['fy_2014-15_percent'] = $worksheet->getCellByColumnAndRow(8, $row)->getValue();
             $data_excel[$row - 2]['fy_2015-16']         = $worksheet->getCellByColumnAndRow(9, $row)->getValue();
             $data_excel[$row - 2]['fy_2015-16_percent'] = $worksheet->getCellByColumnAndRow(10, $row)->getValue();
+
+            $data_excel[$row - 2]['fy_2016-17']         = $worksheet->getCellByColumnAndRow(11, $row)->getValue();
+            $data_excel[$row - 2]['fy_2016-17_percent'] = $worksheet->getCellByColumnAndRow(12, $row)->getValue();
+            $data_excel[$row - 2]['fy_2017-18']         = $worksheet->getCellByColumnAndRow(13, $row)->getValue();
+            $data_excel[$row - 2]['fy_2017-18_percent'] = $worksheet->getCellByColumnAndRow(14, $row)->getValue();
+
         }
 
+        // print_r($data_excel);
+        // die;
         $this->Crud_model->insertBulkData('thematic_overview', $data_excel);
 
         return true;

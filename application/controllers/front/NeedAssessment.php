@@ -78,6 +78,13 @@ class NeedAssessment extends CI_Controller
         }
     }
 
+    public function getLevelMapData(){
+        $city = $this->input->post('city');
+        $level1 = $this->input->post('level');
+
+        echo $this->Loc_modal->getLevelMapData($city, $level1);
+    }
+
     public function getCityMetaData(){
         // this method need to be replaced with some method where city id is corelated with metadata needed for need_assessment
         if ($this->input->post('inObj')) {

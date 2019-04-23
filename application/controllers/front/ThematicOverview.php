@@ -39,19 +39,27 @@ class ThematicOverview extends CI_Controller
         $this->load->view('index', $data);
     }
 
+    public function getCompanyList(){
+        $state = $this->input->post('state');
+        $thematic = $this->input->post('thematic');
+        $district = $this->input->post('district');
 
-    public function saveStateShape(){
-        $geomData = $_POST['inObj'];
-        print_r($geomData);
-        if ($this->input->post('inObj')) {
-            // echo json_encode($geomData); 
-            // $this->Loc_modal->getCompanyListByThematicArea( $this->input->post('inObj'));
-        }
+        echo $this->Loc_modal->getCompanyListByThematicArea($thematic, $state, $district);
+            
     }
 
-    public function getCompanyList(){
-        if ($this->input->post('inObj')) {
-            echo $this->Loc_modal->getCompanyListByThematicArea( $this->input->post('inObj'));
+    public function getCompanyCount(){
+        if($this->input->post('inObj')){
+            echo $this->Loc_modal->getCompanyCountByThematic($this->input->post('inObj'));
+        }
+        
+    }
+
+    public function getOverallData(){
+        $state = $this->input->post('state');
+        $thematic = $this->input->post('thematic');
+        if ($state && $thematic ) {
+            echo $this->Loc_modal->getThematicOverviewDataByState($thematic, $state );
         }        
     }
     
@@ -70,12 +78,39 @@ class ThematicOverview extends CI_Controller
         }
     }
 
+    public function getMapDataByFiscal(){
+        $state = $this->input->post('state');
+        $thematic = $this->input->post('thematic');
+        $fy = $this->input->post('fiscal_year');
+
+        $data = $this->Loc_modal->getThematicOverviewDataByState($thematic, $state, $fy);
+        echo json_encode($data);
+    }
+
     public function getDistrictList()
     {
-        if ($this->input->post('inObj')) {
-            echo $this->Loc_modal->getDistrictList($this->input->post('inObj'));
+        $data = array();
+        $state = $this->input->post('state');
+        $thematic = $this->input->post('thematic');
+        $fy = $this->input->post('fiscal');
+
+        if ($state && $thematic ) {
+            $data['district_list'] = $this->Loc_modal->getDistrictList($state);
+            $data['latlng'] = $this->Loc_modal->getStateLatLng($state);
+            $data['overview'] = $this->Loc_modal->getThematicOverviewDataByState($thematic, $state, $fy);
         }
+        echo json_encode($data);
     }
+
+    public function getMapDataForCompany(){
+        $thematic = $this->input->post('thematic');
+        $state = $this->input->post('state');
+        $fy = $this->input->post('fiscal_year');
+        $district = $this->input->post('district');
+        $company = $this->input->post('company');
+
+        echo $this->Loc_modal->getMapDataForCompany($thematic, $state, $fy, $district, $company);
+    } 
 
     public function getPerformanceData(){
         if ($this->input->post('inObj')) {

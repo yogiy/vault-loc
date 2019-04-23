@@ -28,11 +28,9 @@
     background-color: white;
     border: 1px solid black;
     bottom: 30px;
-    /* height: 20px; */
     padding: 10px;
     position: absolute;
-    /* left: 30px; */
-		/* width: 100px; */
+    display:none;
 }
 	#perform_count{
 		font-weight: bold;
@@ -178,7 +176,7 @@ foreach ($thematic as $key => $value) {?>
 										<label>State</label>
 									</div>
 									<div class="col-xs-12 col-sm-6 col-md-4">
-										<select class="form-control" id="thematic_states_dropdown">
+										<select class="form-control" id="thematic_states_dropdown" disabled>
 											<option value="none">Select</option>
 											<?php foreach ($states as $key => $value) {?>
 												<option value="<?php echo $value->state_id ?>" ><?php echo $value->title ?></option>
@@ -191,7 +189,7 @@ foreach ($thematic as $key => $value) {?>
 										<label>District</label>
 									</div>
 									<div class="col-xs-12 col-sm-6 col-md-4">
-										<select class="form-control" id="thematic_district_dropdown">
+										<select class="form-control" id="thematic_district_dropdown" disabled>
 											<option value="none">Select</option>
 										</select>
 									</div>
@@ -201,7 +199,7 @@ foreach ($thematic as $key => $value) {?>
 										<label>Year</label>
 									</div>
 									<div class="col-xs-12 col-sm-6 col-md-4">
-										<select class="form-control" id="thematic_fiscal_dropdown">
+										<select class="form-control" id="thematic_fiscal_dropdown" disabled>
 										<?php foreach ($years as $key => $value) {?>
 												<option value="<?php echo $value['fy_year'] ?>" >FY <?php echo $value['fy_year'] ?></option>
 											<?php }?>
@@ -211,7 +209,7 @@ foreach ($thematic as $key => $value) {?>
 										<label>Client</label>
 									</div>
 									<div class="col-xs-12 col-sm-6 col-md-4">
-										<select class="form-control" id="thematic_company_dropdown">
+										<select class="form-control" id="thematic_company_dropdown" disabled>
 											<option value="none">Select</option>
 										</select>
 									</div>
@@ -219,7 +217,7 @@ foreach ($thematic as $key => $value) {?>
 								<div class="row">
 									<div class="col-sm-12">
 												<div id="map_canvas" ></div>
-												<div id="info-box">Move mouse over region</div>
+												<div id="info-box" >Move mouse over region</div>
 												<a href="<?php echo base_url();?>dashboard" class="btn btn-warning btn-sm pull-right" style="margin-left: 10px; border-radius: 0px">Back</a>
 												
 									</div>
@@ -331,30 +329,104 @@ foreach ($thematic as $key => $value) {?>
 			}
 		});
 
-	
+function removeCompanyMarkers(){
+	for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(null);
+  }
+	markers = [];
+}
+
+	$("#thematic_company_dropdown").on('change', function(event){
+		event.preventDefault();
+		selected = $(this).val();
+		if (selected == 'none') {
+			removeCompanyMarkers();
+			// console.log("RESET DATA");
+		} else {
+			thematicId = $('#thematic_areas_drop').val();
+			stateId = $('#thematic_states_dropdown').val();
+			fiscal = $('#thematic_fiscal_dropdown').val();
+			districtId = $('#thematic_district_dropdown').val() == 'none' ? 0 : $('#thematic_district_dropdown').val();
+			company_name = $('#thematic_company_dropdown option:selected').html();
+
+			$.ajax({
+				url: '<?php echo site_url("front/ThematicOverview/getMapDataForCompany"); ?>',
+				method: "POST",
+				data: { thematic: thematicId, state:stateId, fiscal_year: fiscal, district: districtId, company: company_name },
+				success: function(resp){
+			
+			removeCompanyMarkers();
+					
+					// console.log(resp);
+					locations = JSON.parse(resp);
+					var infowindow = new google.maps.InfoWindow();
+
+						for (var i = 0; i < locations.length; i++) {  
+							var marker = new google.maps.Marker({
+								position: new google.maps.LatLng(locations[i]['lat'], locations[i]['lng']),
+								map: map
+							});
+
+							google.maps.event.addListener(marker, 'mouseover', (function(marker, i) {
+								return function() {
+									infowindow.setContent("Amount: "+locations[i]['amount']);
+									infowindow.open(map, marker);
+								}
+							})(marker, i));
+							markers.push(marker);							
+						}
+
+		////////////////////MARKERS ENDS
+				}
+			});
+		}
+	});
+
 	$('#thematic_fiscal_dropdown').on('change', function (event){
 		event.preventDefault();
+		removeCompanyMarkers();
+		thematicId = $('#thematic_areas_drop').val();
+		stateId = $('#thematic_states_dropdown').val();
+		fiscal = $('#thematic_fiscal_dropdown').val();
+
 		$.ajax({
-				url: '<?php echo site_url("front/ThematicOverview/getCSRMapData"); ?>',
+				url: '<?php echo site_url("front/ThematicOverview/getMapDataByFiscal"); ?>',
 				method: "POST",
-				data: { inObj: $('#thematic_areas_drop').val(), fiscal_year: $('#thematic_fiscal_dropdown').val() },
+				data: { thematic: thematicId, state:stateId, fiscal_year: fiscal },
 				success: function(resp){
-					console.log('Map data');
-					console.log(resp);
-					map_chart_data = JSON.parse(resp);
-					drawRegionsMap();
+					// console.log('Map data');
+					// console.log(resp);
+					dataOverview = JSON.parse(resp);
+					
+					var spendAmountsD = [];
+					dataOverview.forEach(function(row){
+						spendAmountsD.push(+row.AMOUNT);
+					});
+					maxValue = Math.max(...spendAmountsD);
+					minValue = Math.min(...spendAmountsD );
+					secondMid = (maxValue + minValue) / 2 ;
+					firstMid =  (maxValue + secondMid) / 2 ;
+					thirdMid =  (secondMid + minValue) / 2 ;
+					ranges = [maxValue, firstMid, secondMid, thirdMid, minValue];	
+
+					plotStateShapes(state_selected, null, dataOverview, ranges);
+
 				}
 			});
 	});
 
-	$('#thematic_areas_drop').on('change', function (event) {
-		event.preventDefault();
-		selected = $(this).val();
-		if (selected == 'none') {
-			console.log("RESET DATA");
-		} else {
-			
-			$.ajax({ url: '<?php echo site_url("front/ThematicOverview/getTopStatesData"); ?>',
+	function getCompanyCount(selected){
+		$.ajax({ url: '<?php echo site_url("front/ThematicOverview/getCompanyCount"); ?>',
+				method: "POST",
+				data: { inObj: selected },
+				success: function(company_count){
+					$('#company_numbers').text(company_count); 
+				}
+			});
+	}
+
+	function getTopStatesData(selected){
+		$.ajax({ url: '<?php echo site_url("front/ThematicOverview/getTopStatesData"); ?>',
 				method: "POST",
 				data: { inObj: selected },
 				success: function(top_states){
@@ -365,53 +437,75 @@ foreach ($thematic as $key => $value) {?>
 						thematic_top_state_data.push({"name":key, "value":value});
 					});
 					visualization.data(thematic_top_state_data).draw();
+					
 				}
 			});
+	}
 
-			$.ajax({ url: '<?php echo site_url("front/ThematicOverview/getCompanyList"); ?>',
+	function getCompanyListData(){
+		thematicID = $('#thematic_areas_drop').val();
+		stateID = ($('#thematic_states_dropdown').val() == 'none') ? null : $('#thematic_states_dropdown').val();
+		districtID = ($('#thematic_district_dropdown').val() == 'none') ? null : $('#thematic_district_dropdown').val()
+
+		$.ajax({ url: '<?php echo site_url("front/ThematicOverview/getCompanyList"); ?>',
 				method: "POST",
-				data: { inObj: selected },
+				data: { thematic:thematicID,  state: stateID, district: districtID },
 				success: function(res){
 					companies = JSON.parse(res);
-					// console.log("Companyies: "+companies.length);
-					// 
-					$('#company_numbers').text(companies.length); 
+					// console.log(companies);
+					// $('#company_numbers').text(companies.length); 
 					companySelect = $("#thematic_company_dropdown");
 					companySelect.empty(); 
 					companySelect.append($("<option/>").attr("value", "none").text("Select"));
 					$.each(companies, function(a, b) {
 						companySelect.append($("<option/>").attr("value", b.id).text(b.company));
 					});
-					/////
 				}
 			});
-			
-			$.ajax({ url: '<?php echo site_url("front/ThematicOverview/getCSRMapData"); ?>',
+	}
+
+	function getMapData(selected){
+		$.ajax({ url: '<?php echo site_url("front/ThematicOverview/getCSRMapData"); ?>',
 				method: "POST",
 				data: { inObj: selected, fiscal_year: $('#thematic_fiscal_dropdown').val() },
 				success: function(resp){
-					// console.log('Map data');
-					// console.log(resp);
+					// // console.log('Map data');
+					// // console.log(resp);
 					map_chart_data = JSON.parse(resp);
-					drawRegionsMap();
+					// drawRegionsMap();
+					
+					spendAmounts = [];
+					map_chart_data.forEach(function(row){
+						spendAmounts.push(+row.amount_spend);
+					});
+					maxValue = Math.max(...spendAmounts);
+					minValue = Math.min(...spendAmounts );
+					secondMid = (maxValue + minValue) / 2 ;
+					firstMid =  (maxValue + secondMid) / 2 ;
+					thirdMid =  (secondMid + minValue) / 2 ;
+					// // console.log(maxValue +" : "+firstMid +" : "+secondMid +" : "+thirdMid +" : "+minValue);
+					ranges = [maxValue, firstMid, secondMid, thirdMid, minValue]	
+					showStateDataLayer(map_chart_data, ranges);
 				}
 			});
+	}
 
-			$.ajax({ url: '<?php echo site_url("front/ThematicOverview/getPerformanceData"); ?>',
+	function getPerformanceData(selected){
+		$.ajax({ url: '<?php echo site_url("front/ThematicOverview/getPerformanceData"); ?>',
 				method: "POST",
 				data: { inObj: selected, district: null },
 				success: function(performances){
-					console.log("performances");
+					// // console.log("performances");
 					data_per = JSON.parse(performances);
 					$('#perform_count').html(data_per.length);
-					console.log(data_per);
+					// // console.log(data_per);
 					keys = [];
 					for(var k in data_per[0]){
 						if(k != 'thematic_area_id' && k != 'param_name' && k != 'id' ){
 							keys.push(k);
 						}
 					}
-					console.log(keys); 
+					// console.log(keys); 
 					newDataSet = [];
 					$.each(data_per, function (i, item) {
 						sub_data_set = [];
@@ -431,23 +525,26 @@ foreach ($thematic as $key => $value) {?>
 						};
 						newDataSet.push(d);
 					});
-					console.log(newDataSet);
+					// console.log(newDataSet);
 					bubbleChart.data.datasets = newDataSet;
 					bubbleChart.update();
 
 				}
 			});
 
-			$.ajax({ url: '<?php echo site_url("front/ThematicOverview/getCSRExpenditureData"); ?>',
+	}
+
+	function getCSRExpenditureData(selected){
+		$.ajax({ url: '<?php echo site_url("front/ThematicOverview/getCSRExpenditureData"); ?>',
 				method: "POST",
 				data: { inObj: selected },
 				success: function (response) {
 					charts_csr_labels = [];
 					charts_csr_data = [];
 					result = JSON.parse(response);
-					// console.log(result);
+					// // console.log(result);
 					var datas = "thematic_area_spend_" + selected;
-					// console.log("DATAS: " + datas);
+					// // console.log("DATAS: " + datas);
 					$.each(result, function (i, item) {
 						charts_csr_labels.push(item.fy_year);
 						charts_csr_data.push(item[datas]);
@@ -459,14 +556,27 @@ foreach ($thematic as $key => $value) {?>
 				}
 
 			});
-		}
-	});
-	$('#thematic_areas_drop').trigger('change');
+	}
 
-	$("#thematic_company_dropdown").on('change', function(event){
+	$('#thematic_areas_drop').on('change', function (event) {
 		event.preventDefault();
-		console.log('Get Data by company and show on map...');
+		removeCompanyMarkers();
+		selected = $(this).val();
+		if (selected == 'none') {
+			location.reload();
+			// console.log("RESET DATA");
+		} else {
+			getTopStatesData(selected);
+			getMapData(selected);
+			getPerformanceData(selected);
+			getCSRExpenditureData(selected);
+			getCompanyCount(selected);
+			$('#thematic_states_dropdown').prop('disabled', false);
+			
+		}
+
 	});
+
 
 // TOTAL CSR EXPENDITURE CHARTS DATA
 	var charts_csr_labels = [];
@@ -569,70 +679,159 @@ foreach ($thematic as $key => $value) {?>
     }
 }); // csr chart ends here
 
+function plotStateShapes(state_selected, latlng, districtsData, range){
 
+	dataStatesLayer.setMap(null);
+	if(dataDistrictsLayer !== null && dataDistrictsLayer !== undefined ){
+		dataDistrictsLayer.setMap(null);
+		dataDistrictsLayer = null;
+	}
+
+	dataDistrictsLayer = new google.maps.Data();
+	
+	dataDistrictsLayer.loadGeoJson(
+		"<?php echo base_url();?>assets/front/mapgeojson/"+state_selected+".geojson", 
+		{ idPropertyName: 'DISTRICT' }, function (feature)
+		{
+			feature.forEach(function(item){
+				dataDistrictsLayer.getFeatureById(item.getProperty('DISTRICT')).setProperty('amount_spend', 0);
+			})
+			districtsData.forEach(function(row){
+				if(dataDistrictsLayer.getFeatureById(row.DISTRICT) != undefined){
+					var numa = +row.AMOUNT;
+					dataDistrictsLayer.getFeatureById(row.DISTRICT).setProperty('amount_spend', numa.toFixed(2));
+				}
+			});
+		}
+	);
+
+	dataDistrictsLayer.setStyle(function(feature) {
+						var colorD = '';
+							amount = feature.getProperty('amount_spend');
+							if( amount > range[1] ){
+								colorD = 'green';
+							}else if(amount <= range[1] && amount > range[2]){
+								colorD = 'blue';
+							}else if(amount <= range[2] && amount > range[3]){
+								colorD = 'orange';
+							}else if(amount < range[3] ){
+								colorD = 'red';
+							}
+							// var color = state_name == state_selected ? 'red' : 'blue';
+							return {
+								fillColor: colorD,
+								strokeWeight: 1
+							};
+					});
+		
+
+	// map.data.setStyle({visible: true});
+	dataDistrictsLayer.addListener('mouseover', function(event) {
+		dataDistrictsLayer.revertStyle();
+		dataDistrictsLayer.overrideStyle(event.feature, {fillColor: 'yellow' });
+		document.getElementById('info-box').textContent = event.feature.getProperty('DISTRICT')+" : "+event.feature.getProperty('amount_spend');
+	});
+
+	dataDistrictsLayer.addListener('mouseout', function(event) {
+		dataDistrictsLayer.revertStyle();
+		document.getElementById('info-box').textContent = 'Move mouse over region';
+	});
+
+	dataDistrictsLayer.setMap(map);
+	if(latlng != null){
+		centeres = { lat: +latlng.lat, lng: +latlng.lng};
+		map.setCenter(centeres);
+		map.panTo(centeres);
+	}
+	map.setZoom(6);
+}
 
 	$('#thematic_states_dropdown').on('change', function (event) {
 		// this is the dropdown for state
 		event.preventDefault();
+		removeCompanyMarkers();
 		selected = $(this).val();
-		// console.log('State Selected: ' + selected);
+		thematicId = $('#thematic_areas_drop').val();
+		state_selected = $('#thematic_states_dropdown option:selected').html();
+		// // console.log('State Selected: ' + selected);
 		if (selected == "none") {
 			option = $('<option />').attr('value', 'none').text('select');
 			$('#thematic_district_dropdown').html(option);
+			$('#thematic_district_dropdown').prop('disabled', true);
+			$('#thematic_fiscal_dropdown').prop('disabled', true);
+			$('#thematic_company_dropdown').prop('disabled', true);
+			getMapData($('#thematic_areas_drop').val());
 		} else {
+			getCompanyListData();
 			$.ajax({
 				url: '<?php echo site_url("front/ThematicOverview/getDistrictList"); ?>',
 				method: "POST",
-				data: { inObj: selected },
+				data: { state: selected, thematic: thematicId, fiscal: $('#thematic_fiscal_dropdown').val() },
 				success: function (response) {
-					$('#thematic_district_dropdown').html(response);
+					res = JSON.parse(response);
+					$('#thematic_district_dropdown').html(res.district_list);
 
+					// console.log(res.overview);
+					dataOverview = res.overview;
 					
-					map.data.setStyle(function(feature) {
-						state_selected = $('#thematic_states_dropdown option:selected').html();
-							var state_name = feature.getProperty('NAME_1');
-							// console.log(state_name+" : "+feature.getGeometry());
-							
-							var color = state_name == state_selected ? 'red' : 'blue';
-							return {
-								fillColor: color,
-								strokeWeight: 1
-							};
+					var spendAmountsD = [];
+					dataOverview.forEach(function(row){
+						spendAmountsD.push(+row.AMOUNT);
 					});
+					maxValue = Math.max(...spendAmountsD);
+					minValue = Math.min(...spendAmountsD );
+					secondMid = (maxValue + minValue) / 2 ;
+					firstMid =  (maxValue + secondMid) / 2 ;
+					thirdMid =  (secondMid + minValue) / 2 ;
+					ranges = [maxValue, firstMid, secondMid, thirdMid, minValue];	
+
+					plotStateShapes(state_selected, res.latlng, dataOverview, ranges);
 					
 				}
 			});
+			
+			$('#thematic_district_dropdown').prop('disabled', false);
+			$('#thematic_fiscal_dropdown').prop('disabled', false);
+			$('#thematic_company_dropdown').prop('disabled', false);
 		}
 	});
 
+var firstTime = 0;
 
+	function highlightDistrict(district){
+		firstTime++;
+		// console.log("Districts: "+district);
+		// dataDistrictsLayer.setMap(null);
+		// dataDistrictsLayer = null;
+		
+		dataDistrictsLayer.revertStyle();
+		dataDistrictsLayer.setStyle(function(feature){
+			if(feature.getProperty('DISTRICT') == district){
+				return {fillColor: 'yellow'};
+			}	else{
+				dataDistrictsLayer.remove(feature);
+			}
+
+		});
+		map.setZoom(8);
+		if(firstTime != 1){
+			$('#thematic_states_dropdown').trigger('change');
+			firstTime = 0;
+		}
+	} 
 
 	$('#thematic_district_dropdown').on('change', function (event) {
 		// This is the dropdown for district
 		event.preventDefault();
+		removeCompanyMarkers();
 		district = $('#thematic_district_dropdown option:selected').html();
-		console.log('District Selected: ' + district);
-		$.ajax({
-				url: '<?php echo site_url("front/ThematicOverview/getPerformanceData"); ?>',
-				method: "POST",
-				data: { inObj:$('#thematic_areas_drop').val() , district: district },
-				success: function(performances){
-					data_per = JSON.parse(performances);
-					$('#perform_count').html(data_per.length);
-					newDataSet = [];
-					$.each(data_per, function (i, item) {
-						d = {
-							label: item.param_name,
-							backgroundColor: dynamicColors(),
-							data: [{ x: i,y: +item[district],r: (+item[district])/10 }]
-						};
-						newDataSet.push(d);
-					});
-					console.log(newDataSet);
-					bubbleChart.data.datasets = newDataSet;
-					bubbleChart.update();
-				}
-			});
+		selected = $(this).val();
+		getCompanyListData();
+		if(selected == 'none'){
+			$('#thematic_states_dropdown').trigger('change');
+		}else{
+			highlightDistrict(district);
+		}
 		
 	});
 
@@ -647,22 +846,81 @@ foreach ($thematic as $key => $value) {?>
 <script type="text/javascript">
 		var map = null;
 		var map_chart_data = null;
-		var marker = null;
+		var markers = [];
 		var centeres =   { lat: 21.9937, lng: 78.9629};
 		var options = { zoom: 4, disableDefaultUI: true, center: centeres};
 
 function initMap() {
   // The map, centered at india
-  map = new google.maps.Map(
-  document.getElementById('map_canvas'), options);
-	map.data.loadGeoJson("<?php echo base_url();?>assets/front/mapgeojson/india_states.geojson");
+  map = new google.maps.Map(document.getElementById('map_canvas'), options);
 
-	map.data.addListener('mouseover', function(event) {
-		// alert("State: "+event.feature.getProperty('NAME_1'));
-		map.data.revertStyle();
-		map.data.overrideStyle(event.feature, {fillColor: 'red' });
-		document.getElementById('info-box').textContent = event.feature.getProperty('NAME_1');
+}
+var dataStatesLayer;
+var dataDistrictsLayer;
+
+
+function showStateDataLayer(inMapData, range){
+	// // console.log(inMapData);
+	if(dataDistrictsLayer !== undefined){
+		dataDistrictsLayer.setMap(null);
+		dataDistrictsLayer = null;
+	}
+	if(dataStatesLayer !== undefined){
+		dataStatesLayer.setMap(null);
+		dataStatesLayer = null;
+	}
+	$("#info-box").show();
+	dataStatesLayer = new google.maps.Data();  
+	dataStatesLayer.loadGeoJson(
+		"<?php echo base_url();?>assets/front/mapgeojson/india_states.geojson", 
+		{ idPropertyName: 'NAME_1' }, function (feature)
+		{
+			inMapData.forEach(function(row){
+				// // console.log(row.state_name);
+				// // console.log(dataStatesLayer.getFeatureById(row.state_name));
+				if(dataStatesLayer.getFeatureById(row.state_name) != undefined){
+					var numa = +row.amount_spend;
+					dataStatesLayer.getFeatureById(row.state_name).setProperty('amount_spend', numa.toFixed(2));
+				}
+			});
+		});
+
+		dataStatesLayer.setStyle(function(feature) {
+						// state_selected = $('#thematic_states_dropdown option:selected').html();
+						var color = '';
+							amount = feature.getProperty('amount_spend');
+							if( amount > range[1] ){
+								color = 'green';
+							}else if(amount <= range[1] && amount > range[2]){
+								color = 'blue';
+							}else if(amount <= range[2] && amount > range[3]){
+								color = 'orange';
+							}else if(amount < range[3] ){
+								color = 'red';
+							}
+							// var color = state_name == state_selected ? 'red' : 'blue';
+							return {
+								fillColor: color,
+								strokeWeight: 1
+							};
+					});
+		
+	dataStatesLayer.addListener('mouseover', function(event) {
+		dataStatesLayer.revertStyle();
+		dataStatesLayer.overrideStyle(event.feature, {fillColor: 'yellow' });
+		document.getElementById('info-box').textContent = event.feature.getProperty('NAME_1')+" : "+event.feature.getProperty('amount_spend');
 	});
+
+	dataStatesLayer.addListener('mouseout', function(event) {
+		dataStatesLayer.revertStyle();
+		document.getElementById('info-box').textContent = 'Move mouse over region';
+	});
+	dataStatesLayer.setMap(map);
+	
+	centeres =   { lat: 21.9937, lng: 78.9629};
+	map.setCenter(centeres);
+	map.setZoom(4);
+	map.panTo(centeres);
 
 }
 

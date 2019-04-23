@@ -362,43 +362,115 @@
 
 // });
 
+var dataCityLayer;
+function plotCityShapeOnMap(cityName, centre){
+	if(dataCityLayer !== null && dataCityLayer !== undefined ){
+		dataCityLayer.setMap(null);
+		dataCityLayer = null;
+	}
+	dataCityLayer = new google.maps.Data();
+
+	dataCityLayer.loadGeoJson(
+		"<?php echo base_url();?>assets/front/mapgeojson/city/"+cityName+".geojson"		
+	);
+	dataCityLayer.addListener('mouseover', function(event) {
+		dataCityLayer.revertStyle();
+		dataCityLayer.overrideStyle(event.feature, {fillColor: 'yellow' });
+	});
+
+	dataCityLayer.addListener('mouseout', function(event) {
+		dataCityLayer.revertStyle();
+	});
+
+	dataCityLayer.setMap(map);
+	map.setCenter(centre);
+	map.setZoom(8);
+	map.panTo(centre);
+
+}
 
 $('#benefit_cities_dropdown').on('change', function(event){
 	// this is the dropdown for state
 	event.preventDefault();
 	selected = $(this).val();
-	console.log('City Selected: '+selected);
+	if(selected == 'none'){
+		location.reload();
+	}
+	selectedCity = $('#benefit_cities_dropdown option:selected').html();
+	// console.log('City Selected: '+selected);
 	
 	$.ajax({
 	url: '<?php echo site_url("front/BeneficiaryModule/getCityData"); ?>',
 	method: "POST",
 	data: {inObj: selected},
 	success: function(response){
-		if(centerMarker != null){
-			centerMarker.setMap(null);
-		}
+			removeCompanyMarkers();
+			$('#benefit_level_dropdown').val("none");
+
 			result = JSON.parse(response);
 			centeres =   { lat: +result['latitude'], lng: +result['longitude'] };
-			map.setCenter(centeres);
-			var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
-			centerMarker = new google.maps.Marker({
-				position: centeres,
-				map: map,
-				icon: image
-			});
+			plotCityShapeOnMap(selectedCity, centeres);
 
 		}
 	});
 
 });
-var centerMarker = null;
+
+
+function removeCompanyMarkers(){
+	for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(null);
+  }
+	markers = [];
+}
 
 $('#benefit_level_dropdown').on('change', function(event){
 	// This is the dropdown for district
 	event.preventDefault();
-	selected = $(this).val();
-	console.log('District Selected: '+selected);
+	selected_level = $(this).val();
+	level_name = $('#benefit_level_dropdown option:selected').html();
+	selected_city = $('#benefit_cities_dropdown').val();
+	
+	if(selected_city == "none"){
+		alert("Please select city first");
+		$("#benefit_level_dropdown").val("none");
+	}else{
+		if(selected_level == "none"){
+			removeCompanyMarkers();
+		}else{
+			city_name = $('#benefit_cities_dropdown option:selected').html();
+			console.log("Get level :"+selected_level+" for city: "+city_name)
+			$.ajax({
+				url: '<?php echo site_url("front/BeneficiaryModule/getLevelMapData"); ?>',
+				method: "POST",
+				data: {city: city_name, level: selected_level},
+				success: function(response){
+					console.log('getLevelMapData');
+					res = JSON.parse(response);
+
+					removeCompanyMarkers();
+					// for (var i = 0; i < locations.length; i++) {  
+					var infowindow = new google.maps.InfoWindow();
+
+								var marker = new google.maps.Marker({
+									position: new google.maps.LatLng(centeres.lat, centeres.lng),
+									map: map
+								});
+
+								google.maps.event.addListener(marker, 'mouseover', (function(marker) {
+									return function() {
+										infowindow.setContent(level_name+" : "+res.amount);
+										infowindow.open(map, marker);
+									}
+								})(marker));
+								markers.push(marker);							
+							// }
+				}
+			});
+		}
+	}
 });
+
 //SEARCH BOX
 $('#beneficiary_table_search').on('input', function(event){
 	event.preventDefault();
@@ -491,19 +563,19 @@ $('#nextSetRecords').on('click', function(event){
 
 <script>
 	var map = null;
-	var marker = null;
-    var centeres =   { lat: <?= $cities[0]['latitude'] ?>, lng: <?= $cities[0]['longitude'] ?>};
-	var options = { zoom: 5, disableDefaultUI: true, center: centeres};
+	var markers = [];
+    var centeres =   { lat: 21.9937, lng: 78.9629};
+	var options = { zoom: 4, disableDefaultUI: true, center: centeres};
+	var centerMarker = null;
 
 function initMap() {
   // The map, centered at india
-  	map = new google.maps.Map(
-	document.getElementById('map_canvas'), options);
-	centerMarker = new google.maps.Marker({
-		position: centeres,
-		map: map,
-		icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
-	});
+  	map = new google.maps.Map(document.getElementById('map_canvas'), options);
+	// centerMarker = new google.maps.Marker({
+	// 	position: centeres,
+	// 	map: map,
+	// 	icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+	// });
 }
     </script>
 
@@ -566,45 +638,45 @@ function parsePolyStrings(ps) {
     return arr;
 }
 	// this is to get the shapes from the database
-		$.ajax({
-			url: '<?php echo site_url("front/BeneficiaryModule/getShapesFromDB"); ?>',
-			method: "GET",
-			success: function(response){
+		// $.ajax({
+		// 	url: '<?php echo site_url("front/BeneficiaryModule/getShapesFromDB"); ?>',
+		// 	method: "GET",
+		// 	success: function(response){
 
 
-				var polys = [response];
-                console.log(polys);
-				var polygonCente = new Array();
-				var count = new Array();
-				var dat = new Array();    //console.log(jQuery.parseJSON(polys));
-				var bounds = new google.maps.LatLngBounds();
-				for (i = 0; i <polys.length ; i++) {
-						tmp = parsePolyStrings(polys[i]);
-						console.log(tmp);
-						if (tmp.length) {
+		// 		var polys = [response];
+        //         console.log(polys);
+		// 		var polygonCente = new Array();
+		// 		var count = new Array();
+		// 		var dat = new Array();    //console.log(jQuery.parseJSON(polys));
+		// 		var bounds = new google.maps.LatLngBounds();
+		// 		for (i = 0; i <polys.length ; i++) {
+		// 				tmp = parsePolyStrings(polys[i]);
+		// 				console.log(tmp);
+		// 				if (tmp.length) {
 
-							polys[i] = new google.maps.Polygon({
-								paths : tmp,
-								strokeColor : '#696969',
-								strokeOpacity : 0.8,
-								strokeWeight : 1.5,
-								fillColor : '#fff', //'#FF0000',
-								// fillColor : fillcolor, //'#FF0000',
-								fillOpacity : 0.4,
+		// 					polys[i] = new google.maps.Polygon({
+		// 						paths : tmp,
+		// 						strokeColor : '#696969',
+		// 						strokeOpacity : 0.8,
+		// 						strokeWeight : 1.5,
+		// 						fillColor : '#fff', //'#FF0000',
+		// 						// fillColor : fillcolor, //'#FF0000',
+		// 						fillOpacity : 0.4,
 
-							});
-							fillcolor='';
-							 polygonCente[i] = polygonCenter(polys[i]);
-							// dat[i] = i+"-"+pincode[i]+'-'+polygonCente[i];
-							//console.log("set to map: "+map);
-							polys[i].setMap(map);
-							// google.maps.event.addListener(polys[i], 'click', attachInfoWindow(polys[i], i,polygonCente[i]));
-						}
-					}
+		// 					});
+		// 					fillcolor='';
+		// 					 polygonCente[i] = polygonCenter(polys[i]);
+		// 					// dat[i] = i+"-"+pincode[i]+'-'+polygonCente[i];
+		// 					//console.log("set to map: "+map);
+		// 					polys[i].setMap(map);
+		// 					// google.maps.event.addListener(polys[i], 'click', attachInfoWindow(polys[i], i,polygonCente[i]));
+		// 				}
+		// 			}
 				
-				//*/
-			}// ajax call to get shapes
-		});
+		// 		//*/
+		// 	}// ajax call to get shapes
+		// });
 
 	</script>
 </body>

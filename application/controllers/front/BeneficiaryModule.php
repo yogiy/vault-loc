@@ -54,6 +54,14 @@ class BeneficiaryModule extends CI_Controller
         // $this->load->view('beneficiary_module', $data);
     }
 
+
+    public function getLevelMapData(){
+        $city = $this->input->post('city');
+        $level1 = $this->input->post('level');
+
+        echo $this->Loc_modal->getLevelMapData($city, $level1);
+    }
+
     public function getShapesFromDB(){
          echo $this->Loc_modal->getShapesFromDB();       
     }

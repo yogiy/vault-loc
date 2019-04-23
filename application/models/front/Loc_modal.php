@@ -16,11 +16,12 @@ class Loc_Modal extends CI_Model
     {
         return $this->db->count_all_results('m_projects');
     }
-    public function getDataFromGeneralTable($dataKey){
+    public function getDataFromGeneralTable($dataKey)
+    {
         $query = $this->db->get_where('general_data', array('data_key' => $dataKey))->result();
         return $query[0]->data_value;
     }
-    
+
     public function getCompanyCount()
     {
         return $this->db->count_all_results('company_wise_csr_spend');
@@ -49,19 +50,19 @@ class Loc_Modal extends CI_Model
 
     public function getLastFiscalYears()
     {
-        $offset =  $this->db->count_all_results('thematic_spends') - 6;
+        $offset = $this->db->count_all_results('thematic_spends') - 6;
         return $this->db
-        ->limit(6, $offset)
-        ->select('fy_year')->get('thematic_spends')->result_array();
+            ->limit(6, $offset)
+            ->select('fy_year')->get('thematic_spends')->result_array();
 
     }
 
     public function getTotalCSRExpenditure()
     {
-        $offset =  $this->db->count_all_results('thematic_spends') - 6;
+        $offset = $this->db->count_all_results('thematic_spends') - 6;
         return $this->db
-        ->limit(6, $offset)
-        ->select('fy_year, total_spend')
+            ->limit(6, $offset)
+            ->select('fy_year, total_spend')
             ->get('thematic_spends')->result_array();
 
     }
@@ -69,7 +70,7 @@ class Loc_Modal extends CI_Model
     // thematic overview data
     public function getThematicCSRSpend($id)
     {
-        $offset =  $this->db->count_all_results('thematic_spends') - 6;
+        $offset = $this->db->count_all_results('thematic_spends') - 6;
         $col = 'thematic_area_spend_' . $id;
         $query = $this->db
             ->limit(6, $offset)
@@ -104,9 +105,71 @@ class Loc_Modal extends CI_Model
         return json_encode($query);
     }
 
-    public function getCompanyListByThematicArea($thematic_area_id){
-        $query = $this->db->get_where('thematic_overview', array('thematic_area_id' => $thematic_area_id))->result_array();
+    public function getCompanyListByThematicArea($thematic_area_id, $state_id, $district_id)
+    {
+        $filter = array();
+        if($district_id == null){
+            $filter = array(
+                'thematic_area_id' => $thematic_area_id, 
+                'state_id'=>$state_id
+            );
+        }else{
+            $filter = array(
+                'thematic_area_id' => $thematic_area_id, 
+                'state_id'=>$state_id,
+                'district_id' => $district_id
+            );
+        }
+        $query = $this->db->distinct()->select('company')->get_where('thematic_overview', $filter)->result_array();
+        // return $this->db->last_query();
         return json_encode($query);
+    }
+
+    public function getCompanyCountByThematic($thematic_area_id){
+
+        $query = $this->db->distinct()->select('company')->get_where('thematic_overview', array('thematic_area_id' => $thematic_area_id ))->result_array();
+        return count($query);
+    }
+
+    public function getThematicOverviewDataByState($thematic_area_id, $stateId, $fy  ){
+        //->group_by("district_id")
+        //
+        //$this->db->select_sum('age');
+        //$this->db->group_by("title"); 
+        $fy_year = 'fy_'.$fy;
+        $sql = "SELECT d.district_id, d.title as DISTRICT, SUM(`".$fy_year."`) as AMOUNT FROM `thematic_overview` t, `district` d WHERE t.`state_id` = ? AND t.thematic_area_id = ? AND t.district_id = d.district_id GROUP BY t.district_id ";
+        return $this->db->query($sql, array( $stateId, $thematic_area_id))->result_array();
+        
+        // return $this->db->last_query();
+        
+        // $query = $this->db->get_where('thematic_overview', array('thematic_area_id' => $thematic_area_id, 'state_id' => $stateId))->result_array();
+        // return $query;
+    }
+
+    public function getMapDataForCompany($thematic, $state, $fy, $district, $company){
+        $financial = 'fy_'.$fy;
+        $filter = array();
+        if($district == 0){
+            $filter = array(
+                'thematic_area_id'=>$thematic,
+                'state_id' => $state,
+                'company' => $company
+            );
+            $query = $this->db->select("id, company, lat, lng, district_id, $financial as amount")->get_where('thematic_overview', $filter)->result_array();
+            return json_encode($query);
+            // return $this->db->last_query();
+        }else{
+            $filter = array(
+                'thematic_area_id'=>$thematic,
+                'state_id' => $state,
+                'company' => $company,
+                'district_id'=> $district
+            );
+            $query = $this->db->select_sum($financial, "amount")
+                ->select("id, company, lat, lng, district_id")->get_where('thematic_overview', $filter)->result_array();
+            return json_encode($query);
+        }
+        return "No result";
     }
 
     public function getThematicStateMapData($fiscal, $thematic_area_id)
@@ -119,7 +182,7 @@ class Loc_Modal extends CI_Model
     public function getNeedAssessmentKeyArea($id)
     {
         $this->db->where('thematic_area_id', $id);
-        $offset =  $this->db->count_all_results('need_assesment_key_performance_areas') - 6;
+        $offset = $this->db->count_all_results('need_assesment_key_performance_areas') - 6;
         // return $this->db
         // ->limit(6, $offset)
 
@@ -129,23 +192,25 @@ class Loc_Modal extends CI_Model
         return json_encode($query);
     }
 
-    public function getNeedAssessmentDataByPDID($brief_id){
-        
+    public function getNeedAssessmentDataByPDID($brief_id)
+    {
+
         $query = $this->db->select('thematic_area_id, sub_theme_id, micro_theme_id, theme_id, metro_id, tier1_id, tier2_id, tier3_id, tier4_id')->get_where('brief_modules', array('brief_module_id' => $brief_id))->result_array();
         // echo $this->db->last_query();
         // print_r($query);
         return $query[0];
     }
 
-    public function getLevelDataByThematicArea($thematic_area_id){
+    public function getLevelDataByThematicArea($thematic_area_id)
+    {
         $query = $this->db->select('id, param_name')->get_where('performance_parameters', array('thematic_area_id' => $thematic_area_id))->result_array();
         // echo $this->db->last_query();
         // print_r($query);
         return $query;
     }
 
-
-    public function getNGOListByThematicArea($thematic_area_id){
+    public function getNGOListByThematicArea($thematic_area_id)
+    {
         $this->db->like('sector_id', $thematic_area_id);
         $query = $this->db->select('title, ngo_id')->get('m_ngo')->result_array();
         // return $this->db->last_query();
@@ -153,56 +218,60 @@ class Loc_Modal extends CI_Model
         return $query;
     }
 
-    public function getImageListForNGOByPdid($pdid, $ngoID, $dataType){
-        $query = $this->db->select('images')->get_where('monitoring_reports', array('pdid' => $pdid, 'ngo_id'=>$ngoID))->result_array();
-        $result = explode( '|', $query[0]['images']);
-        if($dataType == "json"){
+    public function getImageListForNGOByPdid($pdid, $ngoID, $dataType)
+    {
+        $query = $this->db->select('images')->get_where('monitoring_reports', array('pdid' => $pdid, 'ngo_id' => $ngoID))->result_array();
+        $result = explode('|', $query[0]['images']);
+        if ($dataType == "json") {
             return json_encode($result);
-        }else{
+        } else {
             return $result;
         }
     }
 
-    public function getImageDataByNgo($pdid, $ngoID){
-        $query = $this->db->select('images')->get_where('monitoring_reports', array('pdid' => $pdid, 'ngo_id'=>$ngoID))->result_array();
-        
+    public function getImageDataByNgo($pdid, $ngoID)
+    {
+        $query = $this->db->select('images')->get_where('monitoring_reports', array('pdid' => $pdid, 'ngo_id' => $ngoID))->result_array();
+
         $output = "";
 
-        if(empty($query)){
-            $output .= '<li><img src="'.base_url().'assets/loc/img/noimg.jpg"></li>';
-            $output .= '<li><img src="'.base_url().'assets/loc/img/noimg.jpg"></li>';
-            $output .= '<li><img src="'.base_url().'assets/loc/img/noimg.jpg"></li>';
-            $output .= '<li><img src="'.base_url().'assets/loc/img/noimg.jpg"></li>';
-            $output .= '<li><img src="'.base_url().'assets/loc/img/noimg.jpg"></li>';
-            $output .= '<li><img src="'.base_url().'assets/loc/img/noimg.jpg"></li>';
-            $output .= '<li><img src="'.base_url().'assets/loc/img/noimg.jpg"></li>';
-            $output .= '<li><img src="'.base_url().'assets/loc/img/noimg.jpg"></li>';
-            $output .= '<li><img src="'.base_url().'assets/loc/img/noimg.jpg"></li>';
-        }else{
-            $result = explode( '|', $query[0]['images']);
-            for($count = 0; $count < count($result); $count++){
-                $output .= '<li><img src="'.base_url().$result[$count].'" /></li>';
+        if (empty($query)) {
+            $output .= '<li><img src="' . base_url() . 'assets/loc/img/noimg.jpg"></li>';
+            $output .= '<li><img src="' . base_url() . 'assets/loc/img/noimg.jpg"></li>';
+            $output .= '<li><img src="' . base_url() . 'assets/loc/img/noimg.jpg"></li>';
+            $output .= '<li><img src="' . base_url() . 'assets/loc/img/noimg.jpg"></li>';
+            $output .= '<li><img src="' . base_url() . 'assets/loc/img/noimg.jpg"></li>';
+            $output .= '<li><img src="' . base_url() . 'assets/loc/img/noimg.jpg"></li>';
+            $output .= '<li><img src="' . base_url() . 'assets/loc/img/noimg.jpg"></li>';
+            $output .= '<li><img src="' . base_url() . 'assets/loc/img/noimg.jpg"></li>';
+            $output .= '<li><img src="' . base_url() . 'assets/loc/img/noimg.jpg"></li>';
+        } else {
+            $result = explode('|', $query[0]['images']);
+            for ($count = 0; $count < count($result); $count++) {
+                $output .= '<li><img src="' . base_url() . $result[$count] . '" /></li>';
             }
         }
         return $output;
-        
+
     }
 
-    public function saveReportingData($ngoID, $report_schedule, $pdid, $imagess){
+    public function saveReportingData($ngoID, $report_schedule, $pdid, $imagess)
+    {
         $data = array(
             'pdid' => $pdid,
             'reporting_schedule' => $report_schedule,
             'ngo_id' => $ngoID,
-            'images' => $imagess
+            'images' => $imagess,
         );
 
         // return $data;
-         
-         return $this->db->insert('monitoring_reports', $data);
+
+        return $this->db->insert('monitoring_reports', $data);
         //  return $this->db->last_query();
     }
 
-    public function metroCities($metro_id, $tier1_id, $tier2_id, $tier3_id, $tier4_id){
+    public function metroCities($metro_id, $tier1_id, $tier2_id, $tier3_id, $tier4_id)
+    {
         $cities = array($metro_id, $tier1_id, $tier2_id, $tier3_id, $tier4_id);
         $this->db->where_in('market_id', $cities);
         $query = $this->db->get('m_market')->result_array();
@@ -290,7 +359,13 @@ class Loc_Modal extends CI_Model
     public function getThematicAreas()
     {
         return $this->db->where('parent_id', 0)
-                ->get('loc_thematic_areas')->result_array();
+            ->get('loc_thematic_areas')->result_array();
+    }
+
+    public function getLevelMapData($city, $level){
+        $col_name = preg_replace('/\s+/', '_', $city);
+        $query = $this->db->select("`{$col_name}` AS amount", FALSE)->get_where("performance_parameters", array('id'=>$level))->result();
+        return json_encode($query[0]);
     }
 
     public function getSubThematicAreas($id)
@@ -333,12 +408,17 @@ class Loc_Modal extends CI_Model
         return $output;
     }
 
-    public function getCityData($city_id){
+    public function getStateLatLng($id)
+    {
+        $query = $this->db->select('lat, lng')->get_where('states', array('state_id' => $id))->result();
+        return $query[0];
+    }
+
+    public function getCityData($city_id)
+    {
         $query = $this->db->get_where('m_market', array('market_id' => $city_id))->result();
         return json_encode($query[0]);
     }
-
-    
 
     public function getDistrict($district)
     {
@@ -368,21 +448,21 @@ class Loc_Modal extends CI_Model
         $this->db->order_by("ST_NumGeometries(ST_GeomFromWKB(SHAPE))", "DESC");
         $query = $this->db->select("pincode,state,district,officename,officetype,no_hh,tot_p,tot_m,tot_f,p_lit_t,p_lit_m,p_lit_f,sexratio,p_lt_elect,p_fuel_lpg,p_h_bnk_se,p_ast_rdio,p_asset_tv,p_a_cp,p_a_cp_wit,p_t_tdnsty,
         p_a_st_mt,p_a_c_j_v,p_a_hh_tv,p_no_asset,ppindex,ST_AsText(ST_GeomFromWKB(ST_AsWKB(SHAPE)))  AS shape,
-        ST_NumGeometries(ST_GeomFromWKB(SHAPE)) AS shape_no ")->get_where('allindia', array('state' => $state, 'district'=> $district))->result();
+        ST_NumGeometries(ST_GeomFromWKB(SHAPE)) AS shape_no ")->get_where('allindia', array('state' => $state, 'district' => $district))->result();
 
-     //  $query = $this->db->select("ST_GeomFromText(GEOMETRYCOLLECTION())")->result();
+        //  $query = $this->db->select("ST_GeomFromText(GEOMETRYCOLLECTION())")->result();
         //print the sql query here a
         //and apply exit
-       // echo $this->db->last_query();
-       
+        // echo $this->db->last_query();
+
         // ST_AsText(ST_GeomFromWKB(ST_AsWKB(SHAPE))) AS shape,
         $shape = array();
         $i = 0;
         foreach ($query as $row) {
 
-           // echo "<pre>"; print_r($row);
-           $shape[$i] = $row->shape;
-          $i++;
+            // echo "<pre>"; print_r($row);
+            $shape[$i] = $row->shape;
+            $i++;
         }
         $counts = count($shape);
 
@@ -406,21 +486,38 @@ class Loc_Modal extends CI_Model
     //MASTER MODAL
     ////////////////////////////////
 
-    public function getThematicId($thematic_area){
-        $query = $this->db->select('id')->get_where('loc_thematic_areas', array('name' => $thematic_area))->result();
-        return $query->id;
-    }
-    
-    public function getDistrictId($district)
+    public function getThematicId($thematic_area)
     {
-        $query = $this->db->select('district_id')->get_where('district', array('title' => $district))->result();
-        return $query[0]->district_id;
+        $query = $this->db->select('id')->get_where('loc_thematic_areas', array('name' => $thematic_area, 'parent_id' => 0))->result();
+        // return $this->db->last_query();;
+        if ($query == false) {
+            return 0;
+        } else {
+            return $query[0]->id;
+        }
+    }
+
+    public function getDistrictId($district, $stateId)
+    {
+        $query = $this->db->select('district_id')->get_where('district', array('title' => $district, 'state_id' => $stateId))->result();
+        if ($query == false) {
+            // echo "not available";
+            return 0;
+        } else {
+            // echo "available";
+            return $query[0]->district_id;
+        }
     }
 
     public function getStateId($state)
     {
         $query = $this->db->select('state_id')->get_where('states', array('title' => $state))->result();
-        return $query[0]->state_id;
+        if ($query == false) {
+            // echo "not available";
+            return 0;
+        } else {
+            return $query[0]->state_id;
+        }
     }
 
     public function getTotalRecordCount($table_name)
@@ -435,7 +532,8 @@ class Loc_Modal extends CI_Model
         print_r($query);
     }
 
-    public function saveThematicOverviewDBBatch($data){
+    public function saveThematicOverviewDBBatch($data)
+    {
         $this->db->insert_batch('district', $data);
     }
 
@@ -458,11 +556,6 @@ class Loc_Modal extends CI_Model
             $this->dbforge->add_column('performance_parameters', $fields);
         }
     }
-
-
-
-    
-
 
 }
 // ST_ASTEXT(`position`) AS `pos_wkt`

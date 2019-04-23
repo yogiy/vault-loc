@@ -54,6 +54,13 @@ class MonitoringReport extends CI_Controller
         // $this->load->view('monitoring_reports', $data);
     }
 
+    public function getLevelMapData(){
+        $city = $this->input->post('city');
+        $level1 = $this->input->post('level');
+
+        echo $this->Loc_modal->getLevelMapData($city, $level1);
+    }
+    
     public function getImageListForNGOByPdid()
     {
         $pdid = $this->input->post('pdid');

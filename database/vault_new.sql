@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 29, 2019 at 05:50 AM
+-- Generation Time: Apr 14, 2019 at 06:19 PM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 7.2.10
 
@@ -48,7 +48,7 @@ CREATE TABLE `admins` (
 --
 
 INSERT INTO `admins` (`admin_id`, `role_id`, `email`, `password`, `fname`, `lname`, `image`, `last_login`, `created_at`, `rand`, `opened`, `status`) VALUES
-(1, 0, 'abhishek@animonlive.com', '8d804a5c53b69a7342c5c3c7ddc5364d', 'Abhishek', 'Gupta', '', '2019-03-29 09:35:22', '0000-00-00 00:00:00', '', 0, 'Active');
+(1, 0, 'abhishek@animonlive.com', '8d804a5c53b69a7342c5c3c7ddc5364d', 'Abhishek', 'Gupta', '', '2019-03-29 16:25:59', '0000-00-00 00:00:00', '', 0, 'Active');
 
 -- --------------------------------------------------------
 
@@ -206,26 +206,11 @@ CREATE TABLE `beneficiary_db` (
   `beneficiary_name` varchar(255) NOT NULL,
   `phone_no` varchar(20) NOT NULL,
   `education_details` text NOT NULL,
-  `training` tinyint(1) NOT NULL
+  `training` tinyint(1) NOT NULL,
+  `pdid` int(11) NOT NULL,
+  `city_id` int(11) NOT NULL,
+  `level_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `beneficiary_db`
---
-
-INSERT INTO `beneficiary_db` (`id`, `village_name`, `pincode`, `beneficiary_name`, `phone_no`, `education_details`, `training`) VALUES
-(1, 'name 1', '10101', 'bene 1', '98989891', '10', 0),
-(2, 'name 2', '10102', 'bene 2', '98989892', '12', 0),
-(3, 'name 3', '10103', 'bene 3', '98989893', 'B A', 0),
-(4, 'name 4', '10104', 'bene 4', '98989894', 'B Com', 1),
-(5, 'name 1', '10101', 'bene 1', '98989891', '10', 1),
-(6, 'name 2', '10102', 'bene 2', '98989892', '12', 1),
-(7, 'name 3', '10103', 'bene 3', '98989893', 'B A', 1),
-(8, 'name 4', '10104', 'bene 4', '98989894', 'B Com', 0),
-(9, 'name 1', '10101', 'bene 1', '98989891', '10', 1),
-(10, 'name 2', '10102', 'bene 2', '98989892', '12', 1),
-(11, 'name 3', '10103', 'bene 3', '98989893', 'B A', 1),
-(12, 'name 4', '10104', 'bene 4', '98989894', 'B Com', 0);
 
 -- --------------------------------------------------------
 
@@ -383,6 +368,8 @@ CREATE TABLE `brief_modules` (
   `brand_id` int(4) NOT NULL,
   `category_id` int(4) NOT NULL,
   `thematic_area_id` int(4) NOT NULL,
+  `sub_theme_id` int(11) NOT NULL,
+  `micro_theme_id` int(11) NOT NULL,
   `theme_id` int(4) NOT NULL,
   `team_assigned_id` varchar(32) NOT NULL,
   `assisted_by_id` varchar(32) NOT NULL,
@@ -411,17 +398,17 @@ CREATE TABLE `brief_modules` (
 -- Dumping data for table `brief_modules`
 --
 
-INSERT INTO `brief_modules` (`brief_module_id`, `user_id`, `client_id`, `brand_id`, `category_id`, `thematic_area_id`, `theme_id`, `team_assigned_id`, `assisted_by_id`, `budget`, `metro_id`, `tier1_id`, `tier2_id`, `tier3_id`, `tier4_id`, `title`, `notes`, `project_duration_from`, `project_duration_to`, `operational_deadline`, `client_submission_deadline`, `filename`, `b_status`, `progress`, `created_at`, `updated_at`, `ip_address`, `status`) VALUES
-(1, 1, 3, 1, 1, 3, 13, '6,3', '1,6', '200000', '1', '2', '4', '6', '8', 'Test 1', 'The quick brown fox jumps right over the lazy dog.', '2018-09-01 00:00:00', '2018-09-26 00:00:00', '2018-09-29 00:00:00', '2018-09-30 00:00:00', '1537961323-NGO master.xlsx', 'WIP', 1, '2018-09-26 00:00:00', '2018-09-26 11:28:43', '::1', 'Active'),
-(2, 1, 3, 1, 1, 2, 11, '6', '1', '100000', '1', '2', '0', '0', '0', 'Test 2', '', '2018-09-04 00:00:00', '2018-09-20 00:00:00', '2018-09-29 00:00:00', '2018-09-30 00:00:00', '1538134266-NGO master.xlsx', 'Completed', 0, '2018-09-28 00:00:00', '2018-09-28 11:31:06', '::1', 'Active'),
-(3, 1, 2, 2, 1, 2, 11, '3,4', '6,7', '34534', '1', '2', '0', '0', '0', 'sdfsdf', '', '2018-09-06 00:00:00', '2018-09-13 00:00:00', '2018-09-14 00:00:00', '2018-09-20 00:00:00', '1538136406-NGO master.xlsx', 'WIP', 0, '2018-09-28 00:00:00', '2018-09-28 12:06:46', '::1', 'Active'),
-(4, 1, 3, 1, 1, 3, 13, '3', '1', '3534', '1', '0', '0', '0', '0', 'asas', 'adfsdfdsfdsddfsd', '2018-09-04 00:00:00', '2018-09-13 00:00:00', '2018-09-05 00:00:00', '2018-09-29 00:00:00', '1538137450-NGO master.xlsx', 'Pending', 0, '2018-09-28 00:00:00', '2018-09-28 12:24:10', '::1', 'Active'),
-(5, 1, 3, 1, 1, 2, 9, '3', '1', '4534534', '1', '0', '0', '0', '0', 'ggggg', 'The quick brown fox jumps right over the lazy dog.', '2018-09-06 00:00:00', '2018-09-15 00:00:00', '2018-09-29 00:00:00', '2018-09-30 00:00:00', '1538219774-NGO master.xlsx', 'Pending', 0, '2018-09-29 00:00:00', '2018-09-29 11:16:14', '::1', 'Active'),
-(8, 1, 4, 1, 1, 1, 6, '6', '1', '343434', '1', '0', '0', '0', '0', 'dddddd', '', '2018-10-17 00:00:00', '2018-10-28 00:00:00', '2018-10-11 00:00:00', '2018-10-25 00:00:00', '1538375586-NGO master.xlsx', 'Pending', 0, '2018-10-01 00:00:00', '2018-10-01 06:33:06', '::1', 'Active'),
-(9, 1, 2, 1, 1, 2, 11, '6', '1', '100000000', '1', '2', '0', '0', '0', 'A-Hans-Cat1', 'XYZ', '2018-10-01 00:00:00', '2018-09-04 00:00:00', '2018-10-01 00:00:00', '2018-09-04 00:00:00', '1538652484-market-list.csv', 'Pending', 0, '2018-10-04 00:00:00', '2018-10-04 11:28:04', '27.56.186.80', 'Active'),
-(10, 1, 2, 3, 1, 3, 12, '4', '7', '50000', '7', '2', '4', '0', '0', 'Demo', '', '2018-10-17 00:00:00', '2018-10-19 00:00:00', '2018-10-09 00:00:00', '2018-10-16 00:00:00', '1538999511-Content-Core-Customer-Interviews.xlsx', 'WIP', 0, '2018-10-08 00:00:00', '2018-10-08 11:51:51', '27.56.186.80', 'Active'),
-(11, 1, 3, 1, 1, 3, 12, '4', '7', '4567879', '7', '2', '4', '6', '8', 'Project-Test', 'testing purpose', '2018-10-09 00:00:00', '2018-11-01 00:00:00', '2018-10-09 00:00:00', '2018-11-01 00:00:00', '1539061050-1538723578-Vault-Masters.xlsx', 'Pending', 0, '2018-10-09 00:00:00', '2018-10-09 04:57:30', '182.72.103.210', 'Active'),
-(12, 1, 3, 1, 1, 3, 12, '6,7,4', '1,8', '50000', '7,1,3,5', '2', '4', '6', '8', 'test 2222', 'The quick brown fox jumps right over the lazy dog.', '2018-10-25 00:00:00', '2018-10-31 00:00:00', '2018-11-30 00:00:00', '2018-12-20 00:00:00', '', 'Pending', 0, '2018-10-25 00:00:00', '2018-10-25 10:23:00', '182.72.103.210', 'Active');
+INSERT INTO `brief_modules` (`brief_module_id`, `user_id`, `client_id`, `brand_id`, `category_id`, `thematic_area_id`, `sub_theme_id`, `micro_theme_id`, `theme_id`, `team_assigned_id`, `assisted_by_id`, `budget`, `metro_id`, `tier1_id`, `tier2_id`, `tier3_id`, `tier4_id`, `title`, `notes`, `project_duration_from`, `project_duration_to`, `operational_deadline`, `client_submission_deadline`, `filename`, `b_status`, `progress`, `created_at`, `updated_at`, `ip_address`, `status`) VALUES
+(1, 1, 3, 1, 1, 3, 24, 0, 3, '6,3', '1,6', '200000', '1', '2', '4', '6', '8', 'Test 1', 'The quick brown fox jumps right over the lazy dog.', '2018-09-01 00:00:00', '2018-09-26 00:00:00', '2018-09-29 00:00:00', '2018-09-30 00:00:00', '', 'WIP', 1, '2018-09-26 00:00:00', '2018-09-26 11:28:43', '::1', 'Active'),
+(2, 1, 3, 1, 1, 2, 0, 0, 11, '6', '1', '100000', '1', '2', '0', '0', '0', 'Test 2', '', '2018-09-04 00:00:00', '2018-09-20 00:00:00', '2018-09-29 00:00:00', '2018-09-30 00:00:00', '1538134266-NGO master.xlsx', 'Completed', 0, '2018-09-28 00:00:00', '2018-09-28 11:31:06', '::1', 'Active'),
+(3, 1, 2, 2, 1, 2, 0, 0, 11, '3,4', '6,7', '34534', '1', '2', '0', '0', '0', 'sdfsdf', '', '2018-09-06 00:00:00', '2018-09-13 00:00:00', '2018-09-14 00:00:00', '2018-09-20 00:00:00', '1538136406-NGO master.xlsx', 'WIP', 0, '2018-09-28 00:00:00', '2018-09-28 12:06:46', '::1', 'Active'),
+(4, 1, 3, 1, 1, 3, 0, 0, 13, '3', '1', '3534', '1', '0', '0', '0', '0', 'asas', 'adfsdfdsfdsddfsd', '2018-09-04 00:00:00', '2018-09-13 00:00:00', '2018-09-05 00:00:00', '2018-09-29 00:00:00', '1538137450-NGO master.xlsx', 'Pending', 0, '2018-09-28 00:00:00', '2018-09-28 12:24:10', '::1', 'Active'),
+(5, 1, 3, 1, 1, 2, 0, 0, 9, '3', '1', '4534534', '1', '0', '0', '0', '0', 'ggggg', 'The quick brown fox jumps right over the lazy dog.', '2018-09-06 00:00:00', '2018-09-15 00:00:00', '2018-09-29 00:00:00', '2018-09-30 00:00:00', '1538219774-NGO master.xlsx', 'Pending', 0, '2018-09-29 00:00:00', '2018-09-29 11:16:14', '::1', 'Active'),
+(8, 1, 4, 1, 1, 1, 0, 0, 6, '6', '1', '343434', '1', '0', '0', '0', '0', 'dddddd', '', '2018-10-17 00:00:00', '2018-10-28 00:00:00', '2018-10-11 00:00:00', '2018-10-25 00:00:00', '1538375586-NGO master.xlsx', 'Pending', 0, '2018-10-01 00:00:00', '2018-10-01 06:33:06', '::1', 'Active'),
+(9, 1, 2, 1, 1, 2, 0, 0, 11, '6', '1', '100000000', '1', '2', '0', '0', '0', 'A-Hans-Cat1', 'XYZ', '2018-10-01 00:00:00', '2018-09-04 00:00:00', '2018-10-01 00:00:00', '2018-09-04 00:00:00', '1538652484-market-list.csv', 'Pending', 0, '2018-10-04 00:00:00', '2018-10-04 11:28:04', '27.56.186.80', 'Active'),
+(10, 1, 2, 3, 1, 3, 0, 0, 12, '4', '7', '50000', '7', '2', '4', '0', '0', 'Demo', '', '2018-10-17 00:00:00', '2018-10-19 00:00:00', '2018-10-09 00:00:00', '2018-10-16 00:00:00', '1538999511-Content-Core-Customer-Interviews.xlsx', 'WIP', 0, '2018-10-08 00:00:00', '2018-10-08 11:51:51', '27.56.186.80', 'Active'),
+(11, 1, 3, 1, 1, 3, 0, 0, 12, '4', '7', '4567879', '7', '2', '4', '6', '8', 'Project-Test', 'testing purpose', '2018-10-09 00:00:00', '2018-11-01 00:00:00', '2018-10-09 00:00:00', '2018-11-01 00:00:00', '1539061050-1538723578-Vault-Masters.xlsx', 'Pending', 0, '2018-10-09 00:00:00', '2018-10-09 04:57:30', '182.72.103.210', 'Active'),
+(12, 1, 3, 1, 1, 3, 0, 0, 12, '6,7,4', '1,8', '50000', '7,1,3,5', '2', '4', '6', '8', 'test 2222', 'The quick brown fox jumps right over the lazy dog.', '2018-10-25 00:00:00', '2018-10-31 00:00:00', '2018-11-30 00:00:00', '2018-12-20 00:00:00', '', 'Pending', 0, '2018-10-25 00:00:00', '2018-10-25 10:23:00', '182.72.103.210', 'Active');
 
 -- --------------------------------------------------------
 
@@ -13651,41 +13638,41 @@ CREATE TABLE `district` (
 --
 
 INSERT INTO `district` (`district_id`, `title`, `state_id`) VALUES
-(36, 'Ahmadnagar', 4),
-(37, 'Akola', 4),
-(38, 'Amravati', 4),
-(39, 'Aurangabad', 4),
-(40, 'Bhandara', 4),
-(41, 'Bid', 4),
-(42, 'Buldana', 4),
-(43, 'Chandrapur', 4),
-(44, 'Dhule', 4),
-(45, 'Gadchiroli', 4),
-(46, 'Gondiya', 4),
-(47, 'Hingoli', 4),
-(48, 'Jalgaon', 4),
-(49, 'Jalna', 4),
-(50, 'Kolhapur', 4),
-(51, 'Latur', 4),
-(52, 'Mumbai', 4),
-(53, 'Mumbai Sub-urban', 4),
-(54, 'Nagpur', 4),
-(55, 'Nanded', 4),
-(56, 'Nandurbar', 4),
-(57, 'Nashik', 4),
-(58, 'Osmanabad', 4),
-(59, 'Parbhani', 4),
-(60, 'Pune', 4),
-(61, 'Raigarh', 4),
-(62, 'Ratnagiri', 4),
-(63, 'Sangli', 4),
-(64, 'Satara', 4),
-(65, 'Sindhudurg', 4),
-(66, 'Solapur', 4),
-(67, 'Thane', 4),
-(68, 'Wardha', 4),
-(69, 'Washim', 4),
-(70, 'Yavatmal', 4);
+(1, 'Ahmadnagar', 22),
+(2, 'Akola', 22),
+(3, 'Amravati', 22),
+(4, 'Aurangabad', 22),
+(5, 'Bhandara', 22),
+(6, 'Bid', 22),
+(7, 'Buldana', 22),
+(8, 'Chandrapur', 22),
+(9, 'Dhule', 22),
+(10, 'Gadchiroli', 22),
+(11, 'Gondiya', 22),
+(12, 'Hingoli', 22),
+(13, 'Jalgaon', 22),
+(14, 'Jalna', 22),
+(15, 'Kolhapur', 22),
+(16, 'Latur', 22),
+(17, 'Mumbai', 22),
+(18, 'Mumbai Sub-urban', 22),
+(19, 'Nagpur', 22),
+(20, 'Nanded', 22),
+(21, 'Nandurbar', 22),
+(22, 'Nashik', 22),
+(23, 'Osmanabad', 22),
+(24, 'Parbhani', 22),
+(25, 'Pune', 22),
+(26, 'Raigarh', 22),
+(27, 'Ratnagiri', 22),
+(28, 'Sangli', 22),
+(29, 'Satara', 22),
+(30, 'Sindhudurg', 22),
+(31, 'Solapur', 22),
+(32, 'Thane', 22),
+(33, 'Wardha', 22),
+(34, 'Washim', 22),
+(35, 'Yavatmal', 22);
 
 -- --------------------------------------------------------
 
@@ -13714,54 +13701,55 @@ INSERT INTO `general_data` (`data_key`, `data_value`) VALUES
 CREATE TABLE `loc_thematic_areas` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `parent_id` int(11) NOT NULL
+  `parent_id` int(11) NOT NULL,
+  `status` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `loc_thematic_areas`
 --
 
-INSERT INTO `loc_thematic_areas` (`id`, `name`, `parent_id`) VALUES
-(1, 'Education and Skill Development', 0),
-(2, 'Poverty Alleviation, WASH and Health Care', 0),
-(3, 'Rural development\r\n', 0),
-(4, 'Environmental Sustainability\r\n', 0),
-(5, 'National Heritage, Art and Culture', 0),
-(6, 'Women Empowerment\r\n', 0),
-(7, 'Sports and Rural Sports', 0),
-(8, 'PM Relief Funds and Similar Funds', 0),
-(9, 'Armed Force Veterans, War Widows', 0),
-(10, 'Technology Incubation', 0),
-(11, 'Urban Slum Development', 0),
-(12, 'Others', 0),
-(13, 'Skill Development', 1),
-(14, 'Education', 1),
-(15, 'Healthcare (Infrastructure, Medical Camps, MMUs etc.)', 2),
-(16, 'Major disease in population', 2),
-(17, 'MCH-Health Care', 2),
-(18, 'WASH', 2),
-(19, 'Adolescent Development', 2),
-(20, 'Child Development', 2),
-(21, 'Child Protection', 2),
-(22, 'Others', 2),
-(23, 'Integrated Village Development', 3),
-(24, 'Village Infrastructure', 3),
-(25, 'Sustainability Livelihood ', 4),
-(26, 'Health & Sustainability', 4),
-(27, 'Sustainable Agriculture', 4),
-(28, 'Restoration of buildings ', 5),
-(29, 'Art and Culture', 5),
-(30, 'Gender Equality', 6),
-(31, 'Rural Sports & Nationally recognized Sports', 7),
-(32, 'Paralympics and Olympic sports', 7),
-(33, 'Natural Disaster & Calamity', 8),
-(34, 'Natural and unnatural accidents', 8),
-(35, 'Armed Force Veteran Support', 9),
-(36, 'War Widow', 9),
-(37, 'Multiple Sectors ', 10),
-(38, 'Infrastructure', 11),
-(39, 'Slum social & ecomonic Development', 11),
-(40, 'Orphan & Elderly Care', 12);
+INSERT INTO `loc_thematic_areas` (`id`, `name`, `parent_id`, `status`) VALUES
+(1, 'Education and Skill Development', 0, 'Active'),
+(2, 'Poverty Alleviation, WASH and Health Care', 0, 'Active'),
+(3, 'Rural development\r\n', 0, 'Active'),
+(4, 'Environmental Sustainability\r\n', 0, 'Active'),
+(5, 'National Heritage, Art and Culture', 0, 'Active'),
+(6, 'Women Empowerment\r\n', 0, 'Active'),
+(7, 'Sports and Rural Sports', 0, 'Active'),
+(8, 'PM Relief Funds and Similar Funds', 0, 'Active'),
+(9, 'Armed Force Veterans, War Widows', 0, 'Active'),
+(10, 'Technology Incubation', 0, 'Active'),
+(11, 'Urban Slum Development', 0, 'Active'),
+(12, 'Others', 0, 'Active'),
+(13, 'Skill Development', 1, 'Active'),
+(14, 'Education', 1, 'Active'),
+(15, 'Healthcare (Infrastructure, Medical Camps, MMUs etc.)', 2, 'Active'),
+(16, 'Major disease in population', 2, 'Active'),
+(17, 'MCH-Health Care', 2, 'Active'),
+(18, 'WASH', 2, 'Active'),
+(19, 'Adolescent Development', 2, 'Active'),
+(20, 'Child Development', 2, 'Active'),
+(21, 'Child Protection', 2, 'Active'),
+(22, 'Others', 2, 'Active'),
+(23, 'Integrated Village Development', 3, 'Active'),
+(24, 'Village Infrastructure', 3, 'Active'),
+(25, 'Sustainability Livelihood ', 4, 'Active'),
+(26, 'Health & Sustainability', 4, 'Active'),
+(27, 'Sustainable Agriculture', 4, 'Active'),
+(28, 'Restoration of buildings ', 5, 'Active'),
+(29, 'Art and Culture', 5, 'Active'),
+(30, 'Gender Equality', 6, 'Active'),
+(31, 'Rural Sports & Nationally recognized Sports', 7, 'Active'),
+(32, 'Paralympics and Olympic sports', 7, 'Active'),
+(33, 'Natural Disaster & Calamity', 8, 'Active'),
+(34, 'Natural and unnatural accidents', 8, 'Active'),
+(35, 'Armed Force Veteran Support', 9, 'Active'),
+(36, 'War Widow', 9, 'Active'),
+(37, 'Multiple Sectors ', 10, 'Active'),
+(38, 'Infrastructure', 11, 'Active'),
+(39, 'Slum social & ecomonic Development', 11, 'Active'),
+(40, 'Orphan & Elderly Care', 12, 'Active');
 
 -- --------------------------------------------------------
 
@@ -13772,6 +13760,8 @@ INSERT INTO `loc_thematic_areas` (`id`, `name`, `parent_id`) VALUES
 CREATE TABLE `map_db` (
   `id` int(11) NOT NULL,
   `pdid` varchar(15) NOT NULL,
+  `city_id` int(11) NOT NULL,
+  `level_id` int(11) NOT NULL,
   `city` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `latitude` varchar(20) NOT NULL,
@@ -13785,8 +13775,8 @@ CREATE TABLE `map_db` (
 -- Dumping data for table `map_db`
 --
 
-INSERT INTO `map_db` (`id`, `pdid`, `city`, `description`, `latitude`, `longitude`, `pincode`, `count`, `percentage`) VALUES
-(1, '1', 'delhi', 'sample data. ', '28.145275', '72.14587', '110100', 251, 25);
+INSERT INTO `map_db` (`id`, `pdid`, `city_id`, `level_id`, `city`, `description`, `latitude`, `longitude`, `pincode`, `count`, `percentage`) VALUES
+(1, '1', 0, 0, 'delhi', 'sample data. ', '28.145275', '72.14587', '110100', 251, 25);
 
 -- --------------------------------------------------------
 
@@ -14230,20 +14220,21 @@ CREATE TABLE `overall_snapshot` (
   `villages` int(11) NOT NULL,
   `impact` int(11) NOT NULL,
   `target` int(11) NOT NULL,
-  `completion` int(11) NOT NULL
+  `completion` int(11) NOT NULL,
+  `pdid` int(11) NOT NULL,
+  `city_id` int(11) NOT NULL,
+  `level_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `overall_snapshot`
 --
 
-INSERT INTO `overall_snapshot` (`id`, `training`, `villages`, `impact`, `target`, `completion`) VALUES
-(1, 10, 102, 65, 1365, 1),
-(2, 20, 204, 130, 2730, 1),
-(3, 10, 102, 65, 1365, 1),
-(4, 20, 204, 130, 2730, 1),
-(5, 10, 102, 65, 1365, 1),
-(6, 20, 204, 130, 2730, 1);
+INSERT INTO `overall_snapshot` (`id`, `training`, `villages`, `impact`, `target`, `completion`, `pdid`, `city_id`, `level_id`) VALUES
+(1, 10, 102, 65, 1365, 10, 1, 1, 0),
+(2, 20, 204, 130, 2730, 9, 1, 1, 0),
+(3, 10, 102, 65, 1365, 8, 1, 2, 0),
+(4, 20, 204, 130, 2730, 7, 1, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -14327,20 +14318,20 @@ CREATE TABLE `performance_parameters` (
 --
 
 INSERT INTO `performance_parameters` (`id`, `param_name`, `thematic_area_id`, `Ahmadnagar`, `Akola`, `Amravati`, `Aurangabad`, `Bhandara`, `Bid`, `Buldana`, `Chandrapur`, `Dhule`, `Gadchiroli`, `Gondiya`, `Hingoli`, `Jalgaon`, `Jalna`, `Kolhapur`, `Latur`, `Mumbai`, `Mumbai_Sub-urban`, `Nagpur`, `Nanded`, `Nandurbar`, `Nashik`, `Osmanabad`, `Parbhani`, `Pune`, `Raigarh`, `Ratnagiri`, `Sangli`, `Satara`, `Sindhudurg`, `Solapur`, `Thane`, `Wardha`, `Washim`, `Yavatmal`) VALUES
-(1, 'Mothers registered in the first trimester when they were pregnant with last live birth/still birth (%)', 2, 75.9, 52.8, 63, 46.5, 61.7, 53.3, 56.9, 67.8, 35.9, 45.4, 61.9, 46.5, 40.1, 55.1, 77.9, 60.1, 0, 0, 81.4, 55.6, 24.5, 49.4, 59.5, 58.8, 72.7, 62.5, 71.9, 67.5, 63, 79.7, 71.8, 70.1, 79, 65.6, 57.3),
-(2, 'Mothers who had at least 3 Ante-Natal care visits during the last pregnancy (%)                   ', 2, 81.9, 62.2, 74.1, 54.8, 84.3, 61.9, 64.3, 79.6, 44.8, 71.1, 82.9, 66.9, 54.7, 67.7, 85.5, 75.8, 0, 0, 97.1, 71.8, 33.8, 62.4, 71.6, 63, 84.8, 82.1, 81.6, 81.4, 93.3, 92, 84.2, 80.4, 88.6, 66.1, 67.6),
-(3, 'Mothers who got at least one TT injection when they were pregnant with their last live birth / still birth (%)#', 2, 95.8, 86.9, 92.7, 82.5, 94.2, 87.5, 86.8, 89.2, 70.1, 82.2, 91, 89.9, 77.5, 87.1, 95.1, 88.7, 0, 0, 97.1, 96.9, 52.2, 81.4, 91.7, 82.7, 96.7, 93.2, 94.3, 97.3, 98.6, 99.4, 95.6, 93.7, 98.9, 92.5, 86.9),
-(4, 'Institutional births (%)', 2, 76.5, 67, 49.7, 50, 51.2, 63.8, 60.1, 44.5, 43.2, 19.8, 49, 37.5, 43.9, 61.6, 85.2, 60.5, 0, 0, 71.4, 47.7, 16.5, 47.7, 56.1, 60.5, 73.8, 62.7, 70.9, 70.8, 86, 92.4, 54.4, 47.2, 74.7, 61.2, 46.9),
-(5, 'Delivery at home assisted by a doctor/nurse /LHV/ANM(%)', 2, 9.9, 5.5, 3.3, 14, 16.2, 1.1, 5, 5.5, 10, 11.9, 10, 6.7, 13, 7.5, 5.1, 9.2, 0, 0, 2.8, 5.8, 9.1, 6.1, 11.5, 3.9, 5.8, 5.4, 3.5, 2.7, 4.1, 1.2, 8.9, 1.9, 1.7, 8.2, 7.5),
-(6, 'Mothers who received post natal care within 48 hours of delivery of their last child (%)', 2, 92.2, 74, 71.9, 61.3, 67.3, 78, 72, 69.9, 59.8, 60.2, 74.9, 69.1, 64, 69.5, 90.5, 79.6, 0, 0, 84.9, 61, 31.8, 63.6, 74.3, 72.9, 82.4, 78.2, 78.7, 81.5, 94.7, 96.7, 71.5, 64.2, 90, 68, 70.6),
-(7, 'Geo-graphical Area', 4, 17048, 5390, 12210, 10107, 3588, 10693, 9661, 11443, 7189, 14412, 5733, 4686, 11765, 7718, 7685, 7157, 157, 446, 9892, 10528, 5961, 15530, 7569, 6355, 15643, 7152, 8208, 8572, 10480, 5207, 14895, 9558, 6309, 5184, 13582),
-(8, '2013 Assessment - Very Dense Forest', 4, 0, 11, 655, 19, 130, 0, 23, 1330, 0, 4731, 882, 0, 51, 1, 65, 0, 0, 0, 371, 60, 0, 0, 0, 0, 0, 13, 33, 0, 119, 88, 0, 0, 10, 5, 123),
-(9, '2013 Assessment - Mod. Dense Forest', 4, 69, 96, 1455, 101, 540, 13, 137, 1582, 70, 3384, 818, 10, 359, 16, 1038, 0, 0, 62, 950, 434, 407, 351, 3, 4, 757, 1248, 1909, 95, 569, 1362, 8, 1281, 419, 113, 1110),
-(10, '2013 Assessment - Open Forest', 4, 217, 215, 1077, 437, 217, 162, 430, 1161, 246, 1981, 310, 104, 772, 48, 678, 5, 2, 58, 700, 420, 798, 738, 40, 46, 977, 1600, 2255, 50, 588, 1130, 38, 1627, 430, 214, 1371),
-(11, '2013 Assessment - Total', 4, 286, 322, 3187, 557, 887, 175, 590, 4073, 316, 10096, 2010, 114, 1182, 65, 1781, 5, 2, 120, 2021, 914, 1205, 1089, 43, 50, 1734, 2861, 4197, 145, 1276, 2580, 46, 2908, 859, 332, 2604),
-(12, 'Percent of GA', 4, 1.68, 5.97, 26.1, 5.51, 24.72, 1.64, 6.11, 35.59, 4.4, 70.05, 35.06, 2.43, 10.05, 0.84, 23.18, 0.07, 1.27, 26.91, 20.43, 8.68, 20.21, 7.01, 0.57, 0.79, 11.08, 40.01, 51.13, 1.69, 12.18, 49.55, 0.31, 30.42, 13.62, 6.4, 19.17),
-(13, 'Change', 4, 0, 0, 0, 0, -2, 0, 0, -5, -5, 2, -1, 0, -3, 0, 6, 0, 0, 0, -2, 0, -9, 0, 0, 0, 2, -3, -1, 1, 0, 12, -1, -4, 0, 0, -1),
-(14, 'Scrub', 4, 555, 8, 116, 193, 21, 357, 163, 56, 103, 20, 37, 47, 69, 55, 88, 25, 0, 0, 77, 128, 30, 319, 49, 49, 493, 70, 2, 156, 365, 47, 50, 222, 62, 28, 97);
+(1, 'Geo-graphical Area', 4, 17048, 5390, 12210, 10107, 3588, 10693, 9661, 11443, 7189, 14412, 5733, 4686, 11765, 7718, 7685, 7157, 157, 446, 9892, 10528, 5961, 15530, 7569, 6355, 15643, 7152, 8208, 8572, 10480, 5207, 14895, 9558, 6309, 5184, 13582),
+(2, '2013 Assessment - Very Dense Forest', 4, 0, 11, 655, 19, 130, 0, 23, 1330, 0, 4731, 882, 0, 51, 1, 65, 0, 0, 0, 371, 60, 0, 0, 0, 0, 0, 13, 33, 0, 119, 88, 0, 0, 10, 5, 123),
+(3, '2013 Assessment - Mod. Dense Forest', 4, 69, 96, 1455, 101, 540, 13, 137, 1582, 70, 3384, 818, 10, 359, 16, 1038, 0, 0, 62, 950, 434, 407, 351, 3, 4, 757, 1248, 1909, 95, 569, 1362, 8, 1281, 419, 113, 1110),
+(4, '2013 Assessment - Open Forest', 4, 217, 215, 1077, 437, 217, 162, 430, 1161, 246, 1981, 310, 104, 772, 48, 678, 5, 2, 58, 700, 420, 798, 738, 40, 46, 977, 1600, 2255, 50, 588, 1130, 38, 1627, 430, 214, 1371),
+(5, '2013 Assessment - Total', 4, 286, 322, 3187, 557, 887, 175, 590, 4073, 316, 10096, 2010, 114, 1182, 65, 1781, 5, 2, 120, 2021, 914, 1205, 1089, 43, 50, 1734, 2861, 4197, 145, 1276, 2580, 46, 2908, 859, 332, 2604),
+(6, 'Percent of GA', 4, 1.68, 5.97, 26.1, 5.51, 24.72, 1.64, 6.11, 35.59, 4.4, 70.05, 35.06, 2.43, 10.05, 0.84, 23.18, 0.07, 1.27, 26.91, 20.43, 8.68, 20.21, 7.01, 0.57, 0.79, 11.08, 40.01, 51.13, 1.69, 12.18, 49.55, 0.31, 30.42, 13.62, 6.4, 19.17),
+(7, 'Change', 4, 0, 0, 0, 0, -2, 0, 0, -5, -5, 2, -1, 0, -3, 0, 6, 0, 0, 0, -2, 0, -9, 0, 0, 0, 2, -3, -1, 1, 0, 12, -1, -4, 0, 0, -1),
+(8, 'Scrub', 4, 555, 8, 116, 193, 21, 357, 163, 56, 103, 20, 37, 47, 69, 55, 88, 25, 0, 0, 77, 128, 30, 319, 49, 49, 493, 70, 2, 156, 365, 47, 50, 222, 62, 28, 97),
+(9, 'Mothers registered in the first trimester when they were pregnant with last live birth/still birth (%)', 6, 75.9, 52.8, 63, 46.5, 61.7, 53.3, 56.9, 67.8, 35.9, 45.4, 61.9, 46.5, 40.1, 55.1, 77.9, 60.1, 0, 0, 81.4, 55.6, 24.5, 49.4, 59.5, 58.8, 72.7, 62.5, 71.9, 67.5, 63, 79.7, 71.8, 70.1, 79, 65.6, 57.3),
+(10, 'Mothers who had at least 3 Ante-Natal care visits during the last pregnancy (%)                   ', 6, 81.9, 62.2, 74.1, 54.8, 84.3, 61.9, 64.3, 79.6, 44.8, 71.1, 82.9, 66.9, 54.7, 67.7, 85.5, 75.8, 0, 0, 97.1, 71.8, 33.8, 62.4, 71.6, 63, 84.8, 82.1, 81.6, 81.4, 93.3, 92, 84.2, 80.4, 88.6, 66.1, 67.6),
+(11, 'Mothers who got at least one TT injection when they were pregnant with their last live birth / still birth (%)#', 6, 95.8, 86.9, 92.7, 82.5, 94.2, 87.5, 86.8, 89.2, 70.1, 82.2, 91, 89.9, 77.5, 87.1, 95.1, 88.7, 0, 0, 97.1, 96.9, 52.2, 81.4, 91.7, 82.7, 96.7, 93.2, 94.3, 97.3, 98.6, 99.4, 95.6, 93.7, 98.9, 92.5, 86.9),
+(12, 'Institutional births (%)', 6, 76.5, 67, 49.7, 50, 51.2, 63.8, 60.1, 44.5, 43.2, 19.8, 49, 37.5, 43.9, 61.6, 85.2, 60.5, 0, 0, 71.4, 47.7, 16.5, 47.7, 56.1, 60.5, 73.8, 62.7, 70.9, 70.8, 86, 92.4, 54.4, 47.2, 74.7, 61.2, 46.9),
+(13, 'Delivery at home assisted by a doctor/nurse /LHV/ANM(%)', 6, 9.9, 5.5, 3.3, 14, 16.2, 1.1, 5, 5.5, 10, 11.9, 10, 6.7, 13, 7.5, 5.1, 9.2, 0, 0, 2.8, 5.8, 9.1, 6.1, 11.5, 3.9, 5.8, 5.4, 3.5, 2.7, 4.1, 1.2, 8.9, 1.9, 1.7, 8.2, 7.5),
+(14, 'Mothers who received post natal care within 48 hours of delivery of their last child (%)', 6, 92.2, 74, 71.9, 61.3, 67.3, 78, 72, 69.9, 59.8, 60.2, 74.9, 69.1, 64, 69.5, 90.5, 79.6, 0, 0, 84.9, 61, 31.8, 63.6, 74.3, 72.9, 82.4, 78.2, 78.7, 81.5, 94.7, 96.7, 71.5, 64.2, 90, 68, 70.6);
 
 -- --------------------------------------------------------
 
@@ -14606,50 +14597,52 @@ CREATE TABLE `states` (
   `title` varchar(30) NOT NULL,
   `country_id` int(11) NOT NULL DEFAULT '1',
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `status` varchar(128) DEFAULT 'Active'
+  `status` varchar(128) DEFAULT 'Active',
+  `lat` varchar(10) NOT NULL,
+  `lng` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `states`
 --
 
-INSERT INTO `states` (`state_id`, `title`, `country_id`, `updated_at`, `status`) VALUES
-(1, 'Andaman and Nicobar Islands', 1, '2018-10-01 04:54:53', 'Active'),
-(2, 'Andhra Pradesh', 1, '2018-10-01 04:54:53', 'Active'),
-(3, 'Arunachal Pradesh', 1, '2018-10-01 04:54:53', 'Active'),
-(4, 'Assam', 1, '2018-10-01 04:54:53', 'Active'),
-(5, 'Bihar', 1, '2018-10-01 04:54:53', 'Active'),
-(6, 'Chandigarh', 1, '2018-10-01 04:54:53', 'Active'),
-(7, 'Chhattisgarh', 1, '2018-10-01 04:54:53', 'Active'),
-(8, 'Dadra and Nagar Haveli', 1, '2018-10-01 04:54:53', 'Active'),
-(9, 'Daman and Diu', 1, '2018-10-01 04:54:53', 'Active'),
-(10, 'Delhi', 1, '2018-10-01 04:54:53', 'Active'),
-(11, 'Goa', 1, '2018-10-01 04:54:53', 'Active'),
-(12, 'Gujarat', 1, '2018-10-01 04:54:53', 'Active'),
-(13, 'Haryana', 1, '2018-10-01 04:54:53', 'Active'),
-(14, 'Himachal Pradesh', 1, '2018-10-01 04:54:53', 'Active'),
-(15, 'Jammu and Kashmir', 1, '2018-10-01 04:54:53', 'Active'),
-(16, 'Jharkhand', 1, '2018-10-01 04:54:53', 'Active'),
-(17, 'Karnataka', 1, '2018-10-01 04:54:53', 'Active'),
-(19, 'Kerala', 1, '2018-10-01 04:54:53', 'Active'),
-(20, 'Lakshadweep', 1, '2018-10-01 04:54:53', 'Active'),
-(21, 'Madhya Pradesh', 1, '2018-10-01 04:54:53', 'Active'),
-(22, 'Maharashtra', 1, '2018-10-01 04:54:53', 'Active'),
-(23, 'Manipur', 1, '2018-10-01 04:54:53', 'Active'),
-(24, 'Meghalaya', 1, '2018-10-01 04:54:53', 'Active'),
-(25, 'Mizoram', 1, '2018-10-01 04:54:53', 'Active'),
-(26, 'Nagaland', 1, '2018-10-01 04:54:53', 'Active'),
-(29, 'Odisha', 1, '2018-10-01 04:54:53', 'Active'),
-(31, 'Pondicherry', 1, '2018-10-01 04:54:53', 'Active'),
-(32, 'Punjab', 1, '2018-10-01 04:54:53', 'Active'),
-(33, 'Rajasthan', 1, '2018-10-01 04:54:53', 'Active'),
-(34, 'Sikkim', 1, '2018-10-01 04:54:53', 'Active'),
-(35, 'Tamil Nadu', 1, '2018-10-01 04:54:53', 'Active'),
-(36, 'Telangana', 1, '2018-10-01 04:54:53', 'Active'),
-(37, 'Tripura', 1, '2018-10-01 04:54:53', 'Active'),
-(38, 'Uttar Pradesh', 1, '2018-10-01 04:54:53', 'Active'),
-(39, 'Uttarakhand', 1, '2018-10-01 04:54:53', 'Active'),
-(41, 'West Bengal', 1, '2018-10-01 04:54:53', 'Active');
+INSERT INTO `states` (`state_id`, `title`, `country_id`, `updated_at`, `status`, `lat`, `lng`) VALUES
+(1, 'Andaman and Nicobar Islands', 1, '2019-04-14 06:06:21', 'Active', '12.367180', '92.924179'),
+(2, 'Andhra Pradesh', 1, '2019-04-14 06:06:57', 'Active', '15.912900', '79.739990'),
+(3, 'Arunachal Pradesh', 1, '2019-04-14 06:07:27', 'Active', '28.217999', '94.727753'),
+(4, 'Assam', 1, '2019-04-14 06:07:53', 'Active', '26.200603', '92.937576'),
+(5, 'Bihar', 1, '2019-04-14 06:08:16', 'Active', '25.096073', '85.313118'),
+(6, 'Chandigarh', 1, '2019-04-14 06:08:41', 'Active', '30.733315', '76.779419'),
+(7, 'Chhattisgarh', 1, '2019-04-14 06:09:07', 'Active', '21.278658', '81.866142'),
+(8, 'Dadra and Nagar Haveli', 1, '2019-04-14 06:09:32', 'Active', '20.206390', '73.065498'),
+(9, 'Daman and Diu', 1, '2019-04-14 06:10:01', 'Active', '20.384600', '72.858299'),
+(10, 'Delhi', 1, '2019-04-14 06:10:25', 'Active', '28.704060', '77.102493'),
+(11, 'Goa', 1, '2019-04-14 06:10:45', 'Active', '15.299326', '74.123993'),
+(12, 'Gujarat', 1, '2019-04-14 06:11:07', 'Active', '22.258652', '71.192383'),
+(13, 'Haryana', 1, '2019-04-14 06:11:34', 'Active', '29.058777', '76.085602'),
+(14, 'Himachal Pradesh', 1, '2019-04-14 06:11:57', 'Active', '31.104830', '77.173393'),
+(15, 'Jammu and Kashmir', 1, '2019-04-14 06:12:21', 'Active', '32.705330', '74.879997'),
+(16, 'Jharkhand', 1, '2019-04-14 06:12:46', 'Active', '23.610182', '85.279938'),
+(17, 'Karnataka', 1, '2019-04-14 06:13:06', 'Active', '15.317277', '75.713890'),
+(19, 'Kerala', 1, '2019-04-14 06:13:26', 'Active', '10.850516', '76.271080'),
+(20, 'Lakshadweep', 1, '2019-04-14 06:13:49', 'Active', '10.328026', '72.784637'),
+(21, 'Madhya Pradesh', 1, '2019-04-14 06:14:08', 'Active', '22.973423', '78.656891'),
+(22, 'Maharashtra', 1, '2019-04-14 06:14:30', 'Active', '19.751480', '75.713890'),
+(23, 'Manipur', 1, '2019-04-14 06:14:51', 'Active', '24.663717', '93.906265'),
+(24, 'Meghalaya', 1, '2019-04-14 06:15:12', 'Active', '25.467031', '91.366219'),
+(25, 'Mizoram', 1, '2019-04-14 06:15:33', 'Active', '23.164543', '92.937576'),
+(26, 'Nagaland', 1, '2019-04-14 06:15:55', 'Active', '26.158436', '94.562447'),
+(29, 'Odisha', 1, '2019-04-14 06:16:16', 'Active', '20.951666', '85.098526'),
+(31, 'Puducherry', 1, '2019-04-14 06:45:49', 'Active', '11.941591', '79.808311'),
+(32, 'Punjab', 1, '2019-04-14 06:16:58', 'Active', '31.147129', '75.341217'),
+(33, 'Rajasthan', 1, '2019-04-14 06:17:27', 'Active', '27.023804', '74.217934'),
+(34, 'Sikkim', 1, '2019-04-14 06:17:50', 'Active', '27.532972', '88.512215'),
+(35, 'Tamil Nadu', 1, '2019-04-14 06:18:12', 'Active', '11.127123', '78.656891'),
+(36, 'Telangana', 1, '2019-04-14 06:18:34', 'Active', '18.112436', '79.019302'),
+(37, 'Tripura', 1, '2019-04-14 06:18:54', 'Active', '23.940847', '91.988152'),
+(38, 'Uttar Pradesh', 1, '2019-04-14 06:19:25', 'Active', '26.846708', '80.946159'),
+(39, 'Uttarakhand', 1, '2019-04-14 06:19:49', 'Active', '30.066753', '79.019302'),
+(41, 'West Bengal', 1, '2019-04-14 06:20:16', 'Active', '22.986757', '87.854973');
 
 -- --------------------------------------------------------
 
@@ -14765,7 +14758,8 @@ INSERT INTO `thematic_spends` (`id`, `fy_year`, `thematic_area_spend_1`, `themat
 (3, '2016-17', 5123.83, 38, 3716.49, 28, 1507.46, 11, 1282.35, 10, 296.86, 2, 265.2, 2, 563.09, 4, 35.79, 0, 22.92, 0, 49.81, 0, 428.26, 3, 172.54, 1, 13464.6),
 (4, '2017-18', 5366.4, 32, 6009.18, 36, 1645.39, 10, 1601.47, 10, 476.14, 3, 305.66, 2, 585.59, 4, 60.45, 0, 21.65, 0, 85.31, 1, 378.33, 2, 207.5, 1, 16743.07),
 (5, '2018-19', 5608.97, 28, 8301.87, 42, 1783.32, 9, 1920.59, 10, 655.42, 3, 346.12, 2, 608.09, 3, 85.11, 0, 20.32, 0, 120.81, 1, 272.32, 1, 242.46, 1, 19965.4),
-(6, '2019-20', 5851.54, 25, 10594.56, 46, 1921.25, 8, 2239.71, 10, 834.7, 4, 386.58, 2, 630.59, 3, 109.77, 0, 19.97, 0, 156.31, 1, 250.232, 1, 277.42, 1, 23272.632);
+(6, '2019-20', 5851.54, 25, 10594.56, 46, 1921.25, 8, 2239.71, 10, 834.7, 4, 386.58, 2, 630.59, 3, 109.77, 0, 19.97, 0, 156.31, 1, 250.232, 1, 277.42, 1, 23272.632),
+(8, '2020-21', 6851.54, 25, 12594.56, 46, 2921.25, 8, 2139.71, 10, 434.7, 4, 186.58, 2, 830.59, 3, 169.77, 0, 19.97, 0, 156.31, 1, 250.232, 1, 277.42, 1, 23272.632);
 
 -- --------------------------------------------------------
 
@@ -14785,42 +14779,42 @@ CREATE TABLE `thematic_states_data` (
 --
 
 INSERT INTO `thematic_states_data` (`id`, `state_name`, `amount_spend`, `thematic_area_id`) VALUES
-(1, 'Andhra Pradesh', 12365, 1),
-(2, 'Arunachal Pradesh', 325698, 1),
-(3, 'Assam', 14523, 1),
-(4, 'Bihar', 54785, 1),
-(5, 'Chhattisgarh', 23265, 1),
-(6, 'Goa', 4565, 1),
-(7, 'Gujarat', 456325, 1),
-(8, 'Haryana', 48852, 1),
-(9, 'Himachal Pradesh', 545454, 1),
-(10, 'Jammu and Kashmir', 78965, 1),
-(11, 'Jharkhand', 45896, 1),
-(12, 'Karnataka', 785412, 1),
-(13, 'Kerala', 456321, 1),
-(14, 'Madhya Pradesh', 589654, 1),
-(15, 'Maharashtra', 14785, 1),
-(16, 'Manipur', 25874, 1),
-(17, 'Meghalaya', 12365, 1),
-(18, 'Mizoram', 21456, 1),
-(19, 'Nagaland', 47895, 1),
-(20, 'Odisha', 45698, 1),
-(21, 'Punjab', 45698, 1),
-(22, 'Rajasthan', 14785, 1),
-(23, 'Sikkim', 69852, 1),
-(24, 'Tamil Nadu', 32569, 1),
-(25, 'Telangana', 12547, 1),
-(26, 'Tripura', 14589, 1),
-(27, 'Uttar Pradesh', 25698, 1),
-(28, 'Uttarakhand', 14587, 1),
-(29, 'West Bengal', 325668, 1),
-(30, 'Andaman and Nicobar Islands', 125638, 1),
-(31, 'Chandigarh', 96325, 1),
-(32, 'Dadar and Nagar Haveli', 56874, 1),
-(33, 'Daman and Diu', 45632, 1),
-(34, 'Delhi', 78965, 1),
-(35, 'Lakshadweep', 47852, 1),
-(36, 'Puducherry (Pondicherry)', 5468, 1),
+(1, 'Andhra Pradesh', 1, 1),
+(2, 'Arunachal Pradesh', 2, 1),
+(3, 'Assam', 3, 1),
+(4, 'Bihar', 4, 1),
+(5, 'Chhattisgarh', 5, 1),
+(6, 'Goa', 6, 1),
+(7, 'Gujarat', 7, 1),
+(8, 'Haryana', 8, 1),
+(9, 'Himachal Pradesh', 9, 1),
+(10, 'Jammu and Kashmir', 10, 1),
+(11, 'Jharkhand', 11, 1),
+(12, 'Karnataka', 12, 1),
+(13, 'Kerala', 13, 1),
+(14, 'Madhya Pradesh', 14, 1),
+(15, 'Maharashtra', 15, 1),
+(16, 'Manipur', 16, 1),
+(17, 'Meghalaya', 17, 1),
+(18, 'Mizoram', 18, 1),
+(19, 'Nagaland', 19, 1),
+(20, 'Odisha', 20, 1),
+(21, 'Punjab', 21, 1),
+(22, 'Rajasthan', 22, 1),
+(23, 'Sikkim', 23, 1),
+(24, 'Tamil Nadu', 24, 1),
+(25, 'Telangana', 25, 1),
+(26, 'Tripura', 26, 1),
+(27, 'Uttar Pradesh', 27, 1),
+(28, 'Uttarakhand', 28, 1),
+(29, 'West Bengal', 29, 1),
+(30, 'Andaman and Nicobar Islands', 30, 1),
+(31, 'Chandigarh', 31, 1),
+(32, 'Dadar and Nagar Haveli', 32, 1),
+(33, 'Daman and Diu', 33, 1),
+(34, 'Delhi', 34, 1),
+(35, 'Lakshadweep', 35, 1),
+(36, 'Puducherry', 36, 1),
 (37, 'Andhra Pradesh', 12365, 2),
 (38, 'Arunachal Pradesh', 325698, 2),
 (39, 'Assam', 14523, 2),
@@ -14856,7 +14850,7 @@ INSERT INTO `thematic_states_data` (`id`, `state_name`, `amount_spend`, `themati
 (69, 'Daman and Diu', 45632, 2),
 (70, 'Delhi', 78965, 2),
 (71, 'Lakshadweep', 47852, 2),
-(72, 'Puducherry (Pondicherry)', 5468, 2);
+(72, 'Puducherry', 5468, 2);
 
 -- --------------------------------------------------------
 
@@ -14899,7 +14893,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `role_id`, `username`, `email`, `password`, `fname`, `lname`, `phone`, `mobile`, `brand_id`, `category_id`, `industry_name`, `designation`, `assign`, `rand`, `opened`, `gender`, `dob`, `address`, `valid_from`, `valid_to`, `image`, `last_login`, `created_at`, `updated_at`, `ip_address`, `status`) VALUES
-(1, 6, 'abhishek', 'abhishek@animonlive.com', '74e3eb607f6110559277124009573aef', 'Abhishek', 'Gupta', '', '', 0, 0, '', '', '', '', 0, 'Male', '', '', '2018-10-01 00:00:00', '2018-12-31 00:00:00', '', '2019-03-29 09:48:31', '2019-03-29 04:18:31', '2018-10-04 07:11:52', '', 'Active'),
+(1, 6, 'abhishek', 'abhishek@animonlive.com', '74e3eb607f6110559277124009573aef', 'Abhishek', 'Gupta', '', '', 0, 0, '', '', '', '', 0, 'Male', '', '', '2018-10-01 00:00:00', '2018-12-31 00:00:00', '', '2019-04-14 10:13:53', '2019-04-14 04:43:53', '2018-10-04 07:11:52', '', 'Active'),
 (2, 5, 'arun', 'arun@animonlive.com', '821f4f55532f625db05dacbfa7f062ba', 'Arun', 'Kumar', '9854125478', '9854785478', 2, 1, 'SEO Specialist', 'SEO', 'xyz', '', 0, 'Male', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '2018-10-09 05:16:44', '2018-10-04 07:25:11', '', 'Active'),
 (3, 5, 'alsva', 'alsva@animonlive.com', '69d47fc30e34f0a44cb0938ed3db7c8a', 'Alsva', 'Alam', '6545789545', '987458965', 1, 1, 'IT', 'Designer', 'xyz', '', 0, 'Male', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', '2019-03-11 12:18:01', '2019-03-11 06:48:01', '2018-10-04 07:26:37', '', 'Active'),
 (4, 5, 'gaurav', 'gaurav@animonlive.com', '3baa51d163910c7a47fd7951882a5969', 'Gaurav', 'Rai', '5478547854', '9856214589', 2, 1, 'IT', 'Front End Developer', 'xyz', '', 0, 'Male', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', '2018-10-13 11:33:56', '2018-10-13 06:03:56', '2018-10-04 07:27:48', '', 'Active'),
@@ -15000,7 +14994,8 @@ ALTER TABLE `countries`
 -- Indexes for table `district`
 --
 ALTER TABLE `district`
-  ADD PRIMARY KEY (`district_id`);
+  ADD PRIMARY KEY (`district_id`),
+  ADD UNIQUE KEY `title` (`title`);
 
 --
 -- Indexes for table `general_data`
@@ -15214,7 +15209,7 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT for table `beneficiary_db`
 --
 ALTER TABLE `beneficiary_db`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `benificary_impact`
@@ -15292,7 +15287,7 @@ ALTER TABLE `countries`
 -- AUTO_INCREMENT for table `district`
 --
 ALTER TABLE `district`
-  MODIFY `district_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+  MODIFY `district_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `loc_thematic_areas`
@@ -15394,7 +15389,7 @@ ALTER TABLE `need_assesment_key_performance_areas`
 -- AUTO_INCREMENT for table `overall_snapshot`
 --
 ALTER TABLE `overall_snapshot`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `partner_identifications`
@@ -15472,7 +15467,7 @@ ALTER TABLE `thematic_overview`
 -- AUTO_INCREMENT for table `thematic_spends`
 --
 ALTER TABLE `thematic_spends`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `thematic_states_data`
