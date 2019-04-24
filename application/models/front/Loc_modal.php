@@ -184,14 +184,7 @@ class Loc_Modal extends CI_Model
     /// Need assesment
     public function getNeedAssessmentKeyArea($id)
     {
-        $this->db->where('thematic_area_id', $id);
-        $offset = $this->db->count_all_results('need_assesment_key_performance_areas') - 6;
-        // return $this->db
-        // ->limit(6, $offset)
-
-        $query = $this->db
-            ->limit(6, $offset)
-            ->get_where('need_assesment_key_performance_areas', array('thematic_area_id' => $id))->result_array();
+        $query = $this->db->get_where('need_assesment_key_performance_areas', array('thematic_area_id' => $id))->result_array();
         return json_encode($query);
     }
 
